@@ -80,6 +80,7 @@ class FlMbglWidgetState extends State<FlMbglWidget> with SingleTickerProviderSta
             final cameraOptions = bindings.mbgl_camera_options_create();
             bindings.mbgl_camera_options_set_center(cameraOptions, camera.center.latitude, camera.center.longitude);
             bindings.mbgl_camera_options_set_zoom(cameraOptions, camera.zoom - 1);
+            bindings.mbgl_camera_options_set_bearing(cameraOptions, -camera.rotation);
             bindings.mbgl_map_jump_to(map, cameraOptions);
             bindings.mbgl_camera_options_destroy(cameraOptions);
             return SizedBox.expand(
@@ -111,12 +112,15 @@ class FlMbglWidgetState extends State<FlMbglWidget> with SingleTickerProviderSta
             ),
           ],
         ),
-        ElevatedButton(
-          onPressed: () {
-            if (!enabled) enabled = true;
-            setState(() {});
-          },
-          child: Text('Tick'),
+        Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: ElevatedButton(
+            onPressed: () {
+              if (!enabled) enabled = true;
+              setState(() {});
+            },
+            child: Text('Tick'),
+          ),
         ),
       ],
     );

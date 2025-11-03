@@ -7,8 +7,8 @@
 #include <mbgl/style/style.hpp>
 #include <mbgl/util/run_loop.hpp>
 
-#include "flmbgl/flmbgl_map_observer.hpp"
-#include "flmbgl/flmbgl_renderer_frontend.hpp"
+#include "flmbgl/map_observer.hpp"
+#include "flmbgl/renderer_frontend.hpp"
 
 int test_flmbgl() { return 42; }
 
@@ -94,11 +94,11 @@ void mbgl_resource_options_set_tile_server_options(mbgl_resource_options_t _reso
 // ---------------------------------
 
 flmbgl_map_observer_t flmbgl_map_observer_create() {
-  return reinterpret_cast<flmbgl_map_observer_t>(new flmbgl::FlMbglMapObserver());
+  return reinterpret_cast<flmbgl_map_observer_t>(new flmbgl::MapObserver());
 }
 
 void flmbgl_map_observer_destroy(flmbgl_map_observer_t _mapObserver) {
-  delete reinterpret_cast<flmbgl::FlMbglMapObserver*>(_mapObserver);
+  delete reinterpret_cast<flmbgl::MapObserver*>(_mapObserver);
 }
 
 // ---------------------------------
@@ -106,29 +106,27 @@ void flmbgl_map_observer_destroy(flmbgl_map_observer_t _mapObserver) {
 // ---------------------------------
 
 flmbgl_renderer_frontend_t flmbgl_renderer_frontend_create() {
-  return reinterpret_cast<flmbgl_renderer_frontend_t>(
-      new flmbgl::FlMbglRendererFrontend({256, 256}, 1.0f, std::nullopt));
+  return reinterpret_cast<flmbgl_renderer_frontend_t>(new flmbgl::RendererFrontend(std::nullopt));
 }
 
 void flmbgl_renderer_frontend_destroy(flmbgl_renderer_frontend_t _rendererFrontend) {
-  delete reinterpret_cast<flmbgl::FlMbglRendererFrontend*>(_rendererFrontend);
+  delete reinterpret_cast<flmbgl::RendererFrontend*>(_rendererFrontend);
 }
 
 void flmbgl_renderer_frontend_render(flmbgl_renderer_frontend_t _rendererFrontend) {
-  auto* rendererFrontend = reinterpret_cast<flmbgl::FlMbglRendererFrontend*>(_rendererFrontend);
+  auto* rendererFrontend = reinterpret_cast<flmbgl::RendererFrontend*>(_rendererFrontend);
   mbgl::util::RunLoop::Get()->runOnce();
   rendererFrontend->renderFrame();
-  std::cout << "Rendered.";
 }
 
 void flmbgl_renderer_frontend_set_size_and_pixel_ratio(flmbgl_renderer_frontend_t _rendererFrontend, uint32_t width,
                                                        uint32_t height, float pixelRatio) {
-  auto* rendererFrontend = reinterpret_cast<flmbgl::FlMbglRendererFrontend*>(_rendererFrontend);
+  auto* rendererFrontend = reinterpret_cast<flmbgl::RendererFrontend*>(_rendererFrontend);
   rendererFrontend->setSizeAndPixelRatio({static_cast<uint32_t>(width), static_cast<uint32_t>(height)}, pixelRatio);
 }
 
 int64_t flmbgl_renderer_frontend_get_texture_id(flmbgl_renderer_frontend_t _rendererFrontend) {
-  auto* rendererFrontend = reinterpret_cast<flmbgl::FlMbglRendererFrontend*>(_rendererFrontend);
+  auto* rendererFrontend = reinterpret_cast<flmbgl::RendererFrontend*>(_rendererFrontend);
   return rendererFrontend->getTextureId();
 }
 
@@ -170,8 +168,8 @@ void mbgl_camera_options_set_pitch(mbgl_camera_options_t _cameraOptions, double 
 
 mbgl_map_t mbgl_map_create(flmbgl_renderer_frontend_t _rendererFrontend, flmbgl_map_observer_t _mapObserver,
                            mbgl_map_options_t _mapOptions, mbgl_resource_options_t _resourceOptions) {
-  auto* rendererFrontend = reinterpret_cast<flmbgl::FlMbglRendererFrontend*>(_rendererFrontend);
-  auto* mapObserver = reinterpret_cast<flmbgl::FlMbglMapObserver*>(_mapObserver);
+  auto* rendererFrontend = reinterpret_cast<flmbgl::RendererFrontend*>(_rendererFrontend);
+  auto* mapObserver = reinterpret_cast<flmbgl::MapObserver*>(_mapObserver);
   auto* mapOptions = reinterpret_cast<mbgl::MapOptions*>(_mapOptions);
   auto* resourceOptions = reinterpret_cast<mbgl::ResourceOptions*>(_resourceOptions);
 

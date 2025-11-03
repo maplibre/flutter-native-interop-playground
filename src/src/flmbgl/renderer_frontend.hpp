@@ -1,29 +1,23 @@
 #pragma once
 
 #include <mbgl/gfx/backend_scope.hpp>
-#include <mbgl/gfx/headless_backend.hpp>
-#include <mbgl/gfx/headless_frontend.hpp>
+#include <mbgl/gfx/renderable.hpp>
 #include <mbgl/map/map.hpp>
+#include <mbgl/mtl/headless_backend.hpp>
+#include <mbgl/mtl/renderable_resource.hpp>
 #include <mbgl/renderer/renderer.hpp>
 #include <mbgl/renderer/renderer_frontend.hpp>
 
-#include "flmbgl_texture_interface.hpp"
+#include "flutter_texture_interface.hpp"
+#include "renderer_backend.hpp"
 
 namespace flmbgl {
-class FlMbglRendererFrontend : public mbgl::RendererFrontend {
+class RendererFrontend : public mbgl::RendererFrontend {
  public:
-  FlMbglRendererFrontend(mbgl::Size size_, float pixelRatio_, const std::optional<std::string>& localFontFamily)
-      : size(size_), pixelRatio(pixelRatio_) {
-    auto scaledSize = mbgl::Size{
-        static_cast<uint32_t>(size_.width * pixelRatio_),
-        static_cast<uint32_t>(size_.height * pixelRatio_),
-    };
-
-    backend = mbgl::gfx::HeadlessBackend::Create(scaledSize, mbgl::gfx::HeadlessBackend::SwapBehaviour::NoFlush,
-                                                 mbgl::gfx::ContextMode::Unique);
-
-    textureInterface = FlMbglTextureInterface::Create(scaledSize);
-    renderer = std::make_unique<mbgl::Renderer>(*getBackend(), pixelRatio_, localFontFamily);
+  RendererFrontend(const std::optional<std::string>& localFontFamily) : size({0, 0}), pixelRatio(0.0f) {
+    backend = flmbgl::RendererBackend::create(mbgl::gfx::ContextMode::Unique);
+    renderer = std::make_unique<mbgl::Renderer>(*getBackend(), 2.0f, localFontFamily);
+    textureInterface = flmbgl::FlutterTextureInterface::Create();
   }
 
   // Return the RendererBackend for this frontend.
@@ -40,7 +34,6 @@ class FlMbglRendererFrontend : public mbgl::RendererFrontend {
       };
 
       backend->setSize(scaledSize);
-      textureInterface->setSize(scaledSize);
     }
   }
 
@@ -51,11 +44,9 @@ class FlMbglRendererFrontend : public mbgl::RendererFrontend {
 
       auto updateParameters_ = updateParameters;
       renderer->render(updateParameters_);
-      
-      if (backend->hasResource()) {
-        auto image = backend->readStillImage();
-        textureInterface->update(image.data.get(), image.bytes());
-      }
+
+      auto texture = backend->getTexture();
+      textureInterface->update(*backend);
     }
   }
 
@@ -80,9 +71,9 @@ class FlMbglRendererFrontend : public mbgl::RendererFrontend {
  private:
   mbgl::Size size;
   float pixelRatio;
-  std::unique_ptr<mbgl::gfx::HeadlessBackend> backend;
+  std::unique_ptr<flmbgl::RendererBackend> backend;
+  std::unique_ptr<flmbgl::FlutterTextureInterface> textureInterface;
   std::unique_ptr<mbgl::Renderer> renderer;
-  std::unique_ptr<flmbgl::FlMbglTextureInterface> textureInterface;
   std::shared_ptr<mbgl::UpdateParameters> updateParameters;
 };
 }  // namespace flmbgl

@@ -4,15 +4,17 @@
 #include <mbgl/map/map.hpp>
 
 namespace flmbgl {
-class FlMbglMapObserver : public mbgl::MapObserver {
+class MapObserver : public mbgl::MapObserver {
   void onCameraWillChange(CameraChangeMode mode) override {
-    std::cout << "onCameraWillChange: " << (static_cast<uint32_t>(mode)) << std::endl;
+    // std::cout << "onCameraWillChange: " << (static_cast<uint32_t>(mode)) << std::endl;
   }
 
-  void onCameraIsChanging() override { std::cout << "onCameraIsChanging" << std::endl; }
+  void onCameraIsChanging() override { 
+    // std::cout << "onCameraIsChanging" << std::endl; 
+  }
 
   void onCameraDidChange(CameraChangeMode mode) override {
-    std::cout << "onCameraDidChange: " << (static_cast<uint32_t>(mode)) << std::endl;
+    // std::cout << "onCameraDidChange: " << (static_cast<uint32_t>(mode)) << std::endl;
   }
 
   void onWillStartLoadingMap() override { std::cout << "onWillStartLoadingMap" << std::endl; }
@@ -23,10 +25,12 @@ class FlMbglMapObserver : public mbgl::MapObserver {
     std::cout << "onDidFailLoadingMap: " << static_cast<uint32_t>(error) << ", " << message << std::endl;
   }
 
-  void onWillStartRenderingFrame() override { std::cout << "onWillStartRenderingFrame" << std::endl; }
+  void onWillStartRenderingFrame() override {
+    // std::cout << "onWillStartRenderingFrame" << std::endl;
+  }
 
   void onDidFinishRenderingFrame(const RenderFrameStatus&) override {
-    std::cout << "onDidFinishRenderingFrame" << std::endl;
+    // std::cout << "onDidFinishRenderingFrame" << std::endl;
   }
 
   void onWillStartRenderingMap() override { std::cout << "onWillStartRenderingMap" << std::endl; }

@@ -17,7 +17,7 @@ cc_library(
     srcs = FLMBGL_SRCS,
     hdrs = FLMBGL_HDRS,
     # TODO: separate flags per platform
-    copts = CPP_FLAGS + MAPLIBRE_FLAGS + FLMBGL_FLAGS + ["-DFLMBGL_MACOS=1"],
+    copts = CPP_FLAGS + MAPLIBRE_FLAGS + FLMBGL_FLAGS + ["-DFLMBGL_MACOS=1", "-DFLMBGL_MTL=1"],
     visibility = ["//visibility:private"],
 )
 

@@ -7,6 +7,7 @@ import sys
 
 plugin_root = pathlib.Path(__file__).parent.parent
 maplibre_native_root = plugin_root / 'third-party/maplibre-native'
+bazel_opts = '-c dbg'
 
 # copy contents of `src` to `third-party/maplibre-native/platform/flutter`
 def copy_src_to_maplibre_native():
@@ -44,7 +45,7 @@ def copy_src_to_maplibre_native():
 
 def build_ios_dynamic_library():
     # Run bazel build for iOS dynamic library
-    subprocess.run(shlex.split(f'bazel build //platform/flutter:flmbgl_ios_xcframework --//:renderer=metal'), cwd=maplibre_native_root, check=True)
+    subprocess.run(shlex.split(f'bazel build //platform/flutter:flmbgl_ios_xcframework --//:renderer=metal {bazel_opts}'), cwd=maplibre_native_root, check=True)
 
     # Copy the built xcframework to the plugin directory
     bazel_out_ios_xcframework = maplibre_native_root / 'bazel-bin/platform/flutter/flmbgl_ios_xcframework.xcframework.zip'
@@ -57,7 +58,7 @@ def build_ios_dynamic_library():
 
 def build_macos_dynamic_library():
     # Run bazel build for macOS dynamic library
-    subprocess.run(shlex.split(f'bazel build //platform/flutter:flmbgl_macos_xcframework --//:renderer=metal'), cwd=maplibre_native_root, check=True)
+    subprocess.run(shlex.split(f'bazel build //platform/flutter:flmbgl_macos_xcframework --//:renderer=metal {bazel_opts}'), cwd=maplibre_native_root, check=True)
 
     # Copy the built xcframework to the plugin directory
     bazel_out_macos_xcframework = maplibre_native_root / 'bazel-bin/platform/flutter/flmbgl_macos_xcframework.xcframework.zip'
