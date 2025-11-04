@@ -6,3 +6,4 @@ lib/keys.dart
 **/*.xcframework
 **/.swiftpm
 **/build
+**/.DS_Store

@@ -6,7 +6,7 @@ output:
 
 headers:
   entry-points:
-    - src/src/flmln.h
+    - src/flmln.h
 
 functions:
   include:

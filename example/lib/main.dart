@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'aaaaaaaa',
       theme: ThemeData(primarySwatch: Colors.blue),
-      // home: Scaffold(body: FlMlnWindget()),
-      home: Container(),
+      home: Scaffold(body: FlMlnWindget()),
+      // home: Container(),
     );
   }
 }
