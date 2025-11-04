@@ -6,7 +6,7 @@ analyzer:
     no_leading_underscores_for_local_identifiers: ignore
 
   exclude:
-    - third-party/**/*
+    - third-party
 
 formatter:
   page_width: 120

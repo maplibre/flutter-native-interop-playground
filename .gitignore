@@ -5,3 +5,4 @@ lib/keys.dart
 **/.dart_tool
 **/*.xcframework
 **/.swiftpm
+**/build

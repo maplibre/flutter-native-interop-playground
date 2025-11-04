@@ -1,6 +1,5 @@
 #include "flmln.h"
 
-#include <iostream>
 #include <mbgl/map/map.hpp>
 #include <mbgl/style/style.hpp>
 #include <mbgl/util/run_loop.hpp>
@@ -76,7 +75,6 @@ void mbgl_resource_options_destroy(mbgl_resource_options_t _resourceOptions) {
 
 void mbgl_resource_options_set_api_key(mbgl_resource_options_t _resourceOptions, const char* apiKey) {
   auto* resourceOptions = reinterpret_cast<mbgl::ResourceOptions*>(_resourceOptions);
-  std::cout << "api key: " << apiKey << std::endl;
   resourceOptions->withApiKey(std::string(apiKey));
 }
 

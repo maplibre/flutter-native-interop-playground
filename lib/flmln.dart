@@ -11,7 +11,7 @@ import 'gen/flmln_bindings.dart' as gen;
 final bindings = gen.FlMlnBindings(DynamicLibrary.process());
 
 void test() async {
-  bindings.test_flmln();
+  print(bindings.test_flmln());
 }
 
 class FlMlnWindget extends StatefulWidget {
