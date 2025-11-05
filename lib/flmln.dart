@@ -1,4 +1,5 @@
 import 'dart:ffi' hide Size;
+import 'dart:io';
 
 import 'package:ffi/ffi.dart';
 import 'package:flmln/keys.dart';
@@ -8,7 +9,9 @@ import 'package:latlong2/latlong.dart';
 
 import 'gen/flmln_bindings.dart' as gen;
 
-final bindings = gen.FlMlnBindings(DynamicLibrary.process());
+final bindings = Platform.isAndroid
+    ? gen.FlMlnBindings(DynamicLibrary.open('libflmln.so'))
+    : gen.FlMlnBindings(DynamicLibrary.process());
 
 void test() async {
   print(bindings.test_flmln());
@@ -35,6 +38,7 @@ class FlMlnWindgetState extends State<FlMlnWindget> with SingleTickerProviderSta
   @override
   void initState() {
     super.initState();
+    bindings.flmln_initialize();
 
     mapOptions = bindings.mbgl_map_options_create();
     bindings.mbgl_map_options_set_mode(mapOptions, gen.MbglMapMode.MbglMapMode_Continuous);

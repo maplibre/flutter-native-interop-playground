@@ -10,6 +10,7 @@
 #endif
 
 EXTERNC FLMLN_EXPORT int test_flmln();
+EXTERNC FLMLN_EXPORT void flmln_initialize();
 
 // typedefs
 typedef void* mbgl_map_options_t;

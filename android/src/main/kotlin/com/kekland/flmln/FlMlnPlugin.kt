@@ -6,20 +6,21 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
+import org.maplibre.android.MapLibre
+
 import android.util.Log
 
 class FlMlnPlugin : FlutterPlugin, MethodCallHandler {
     private lateinit var channel : MethodChannel
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        Log.i("FlMlnPlugin", "Loading native library")
-        System.loadLibrary("c++_shared")
-        Log.i("FlMlnPlugin", "C++ std shared library loaded")
-        System.loadLibrary("flmln")
-        Log.i("FlMlnPlugin", "Native library loaded")
+        Thread.currentThread().contextClassLoader = this::class.java.classLoader
+        NativeBridge.nativeInitialize(flutterPluginBinding.applicationContext)
 
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flmln")
         channel.setMethodCallHandler(this)
+
+        MapLibre.init(flutterPluginBinding.applicationContext)
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {

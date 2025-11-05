@@ -1,0 +1,2 @@
+-keep class org.maplibre.android.** { *; }
+-keep class com.kekland.flmln.** { *; }

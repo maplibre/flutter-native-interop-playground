@@ -6,8 +6,11 @@
 
 #include "flmln/map_observer.hpp"
 #include "flmln/renderer_frontend.hpp"
+#include "flmln/platform.hpp"
 
 int test_flmln() { return 42; }
+
+void flmln_initialize() { flmln::initializePlatform(); }
 
 // ---------------------------------
 // mbgl_map_options_t
@@ -116,7 +119,7 @@ void flmln_renderer_frontend_render(flmln_renderer_frontend_t _rendererFrontend)
 }
 
 void flmln_renderer_frontend_set_size_and_pixel_ratio(flmln_renderer_frontend_t _rendererFrontend, uint32_t width,
-                                                       uint32_t height, float pixelRatio) {
+                                                      uint32_t height, float pixelRatio) {
   auto* rendererFrontend = reinterpret_cast<flmln::RendererFrontend*>(_rendererFrontend);
   rendererFrontend->setSizeAndPixelRatio({static_cast<uint32_t>(width), static_cast<uint32_t>(height)}, pixelRatio);
 }

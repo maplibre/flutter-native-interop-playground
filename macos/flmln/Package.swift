@@ -13,13 +13,13 @@ let package = Package(
     ],
     targets: [
         .binaryTarget(
-          name: "flmln_macos_xcframework",
-          path: "Artifacts/flmln_macos.xcframework"
+          name: "flmln_xcframework",
+          path: "Artifacts/flmln.xcframework"
         ),
         .target(
             name: "flmln",
             dependencies: [
-                .target(name: "flmln_macos_xcframework")
+                .target(name: "flmln_xcframework")
             ], 
             packageAccess: true
         )

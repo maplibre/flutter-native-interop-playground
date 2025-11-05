@@ -7,7 +7,6 @@
 #include <mbgl/gl/renderable_resource.hpp>
 #include <mbgl/gl/renderer_backend.hpp>
 #include <mbgl/gl/texture2d.hpp>
-#include <mbgl/gl/headless_backend.hpp>
 #include <mbgl/util/util.hpp>
 
 #include "../renderer_backend.hpp"
@@ -94,11 +93,3 @@ class RendererBackend : public flmln::RendererBackend, public mbgl::gl::Renderer
 };
 }  // namespace gl
 }  // namespace flmln
-
-namespace mbgl {
-namespace gl {
-void HeadlessBackend::createImpl() {
-  assert(!impl);
-}
-}  // namespace gl
-}  // namespace mbgl

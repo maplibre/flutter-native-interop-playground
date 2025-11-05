@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.source           = { :path => '.' }
 
   s.osx.source_files = ['flmln/Sources/flmln/*']
-  s.osx.vendored_frameworks = 'flmln/Artifacts/flmln_macos_xcframework.xcframework'
+  s.osx.vendored_frameworks = 'flmln/Artifacts/flmln.xcframework'
   s.osx.dependency 'FlutterMacOS'
   s.osx.deployment_target = '10.15'
 

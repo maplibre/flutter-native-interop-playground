@@ -24,6 +24,13 @@ class FlMlnBindings {
   late final _test_flmlnPtr = _lookup<ffi.NativeFunction<ffi.Int Function()>>('test_flmln');
   late final _test_flmln = _test_flmlnPtr.asFunction<int Function()>();
 
+  void flmln_initialize() {
+    return _flmln_initialize();
+  }
+
+  late final _flmln_initializePtr = _lookup<ffi.NativeFunction<ffi.Void Function()>>('flmln_initialize');
+  late final _flmln_initialize = _flmln_initializePtr.asFunction<void Function()>();
+
   mbgl_map_options_t mbgl_map_options_create() {
     return _mbgl_map_options_create();
   }

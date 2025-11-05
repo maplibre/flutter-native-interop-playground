@@ -1,87 +1,167 @@
 cmake_minimum_required(VERSION 3.25)
-project(flmln CXX C OBJCXX OBJC)
 
-# Configurations
+####################################
+# Project configuration
+####################################
+
+# Determine the target platform
+if (CMAKE_SYSTEM_NAME STREQUAL "Android")
+  set(PLATFORM_ANDROID TRUE)
+elseif (CMAKE_SYSTEM_NAME STREQUAL "iOS")
+  set(PLATFORM_IOS TRUE)
+elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+  set(PLATFORM_MACOS TRUE)
+else()
+  message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
+endif()
+
+# Define the project with appropriate languages
+if (PLATFORM_IOS OR PLATFORM_MACOS)
+  project(flmln LANGUAGES C CXX OBJC OBJCXX)
+  set(CMAKE_OBJC_FLAGS "-fobjc-arc")
+  set(CMAKE_OBJCXX_FLAGS "-fobjc-arc")
+else()
+  project(flmln LANGUAGES C CXX)
+endif()
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+####################################
+# maplibre-native configuration
+####################################
+
 set(MLN_CORE_INCLUDE_DEPS ON)
-set(MLN_WITH_GLFW OFF)
-set(MLN_WITH_METAL ON)
 set(MLN_WITH_RTTI ON)
+set(MLN_WITH_GLFW OFF)
 
-set(CMAKE_OSX_DEPLOYMENT_TARGET 12.0)
-set(CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO)
-
-add_definitions(-DFLMLN_MTL -DFLMLN_IOS)
-
-# maplibre-native
+if (PLATFORM_IOS OR PLATFORM_MACOS)
+  set(MLN_WITH_METAL ON)
+elseif(PLATFORM_ANDROID)
+  set(MLN_WITH_OPENGL ON)
+endif()
 
 add_subdirectory(../.. ../build-maplibre-native EXCLUDE_FROM_ALL)
 
-# flmln
+####################################
+# flmln source files
+####################################
 
-add_library(flmln SHARED
+set(FLMLN_SOURCES
   src/flmln.cpp
   src/flmln.h
-  src/flmln/flutter_texture_interface.cpp
   src/flmln/flutter_texture_interface.hpp
   src/flmln/map_observer.hpp
-  src/flmln/renderer_backend.cpp
+  src/flmln/platform.hpp
   src/flmln/renderer_backend.hpp
   src/flmln/renderer_frontend.hpp
-  src/flmln/mtl/renderer_backend.hpp
-  # src/flmln/platform/darwin/flmln_darwin_stub.c
 )
 
-set_target_properties(flmln PROPERTIES
-  PUBLIC_HEADER src/flmln.h
-)
+# Platform-specific source files
+if (PLATFORM_IOS OR PLATFORM_MACOS)
+  list(APPEND FLMLN_SOURCES
+    src/flmln/platform/darwin/flutter_texture_interface.cpp
+    src/flmln/platform/darwin/flutter_texture_interface.hpp
+    src/flmln/platform/darwin/platform.cpp
+    src/flmln/platform/darwin/ffi.cpp
+    src/flmln/platform/darwin/ffi.hpp
+  )
+elseif (PLATFORM_ANDROID)
+  list(APPEND FLMLN_SOURCES
+    src/flmln/platform/android/flutter_texture_interface.cpp
+    src/flmln/platform/android/flutter_texture_interface.hpp
+    src/flmln/platform/android/platform.cpp
+  )
+endif()
 
-target_link_libraries(flmln PRIVATE mbgl-vendor-metal-cpp)
+# Graphics backend-specific source files
+if (MLN_WITH_METAL)
+  list(APPEND FLMLN_SOURCES src/flmln/mtl/renderer_backend.hpp src/flmln/mtl/renderer_backend.cpp)
+elseif (MLN_WITH_OPENGL)
+  list(APPEND FLMLN_SOURCES src/flmln/gl/renderer_backend.hpp src/flmln/gl/renderer_backend.cpp)
+elseif (MLN_WITH_VULKAN)
+  list(APPEND FLMLN_SOURCES src/flmln/vulkan/renderer_backend.hpp src/flmln/vulkan/renderer_backend.cpp)
+endif()
+
+# Define the shared library
+add_library(flmln SHARED ${FLMLN_SOURCES})
+target_include_directories(flmln PRIVATE src)
+set_target_properties(flmln PROPERTIES PUBLIC_HEADER "src/flmln.h")
+
+####################################
+# Link and configure dependencies
+####################################
 target_link_libraries(flmln PRIVATE mbgl-core)
-target_link_libraries(flmln PRIVATE ios-sdk-static)
+target_include_directories(flmln PRIVATE ../../src)
+target_include_directories(flmln PRIVATE ../../include)
 
-target_include_directories(flmln PRIVATE
-  ../../src
-)
+if (MLN_WITH_METAL)
+  target_link_libraries(flmln PRIVATE mbgl-vendor-metal-cpp)
+elseif (MLN_WITH_OPENGL)
+  target_sources(flmln PRIVATE ../android/src/gl_functions.cpp)
+elseif (MLN_WITH_VULKAN)
+  # TODO
+endif()
 
-target_include_directories(flmln PRIVATE
-  ../../include
-)
+if (PLATFORM_IOS) 
+  target_link_libraries(flmln PRIVATE
+    "-framework Foundation"
+    "-framework CoreFoundation"
+    "-framework CoreGraphics"
+    "-framework ImageIO"
+    "-framework CoreText"
+  )
 
-target_link_libraries(flmln PRIVATE
-  "-framework Foundation"
-  "-framework CoreFoundation"
-  "-framework CoreGraphics"
-  "-framework ImageIO"
-  "-framework CoreText"
-)
+  # Make sure ARC is enabled
+  set_target_properties(mbgl-core PROPERTIES XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC "YES")
+  target_compile_options(mbgl-core PRIVATE -fobjc-arc)
+elseif (PLATFORM_MACOS)
+  target_link_libraries(flmln PRIVATE
+    "-framework Foundation"
+    "-framework CoreFoundation"
+    "-framework CoreGraphics"
+    "-framework ImageIO"
+    "-framework CoreText"
+  )
 
-target_link_options(flmln PRIVATE
-  "-undefined"
-  "dynamic_lookup"
-)
+  # Make sure ARC is enabled
+  set_target_properties(mbgl-core PROPERTIES XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC "YES")
+  target_compile_options(mbgl-core PRIVATE -fobjc-arc)
+elseif (PLATFORM_ANDROID)
+  target_link_libraries(flmln PRIVATE c++_shared)
+  target_link_libraries(flmln PRIVATE mbgl-vendor-unique_resource)
+  target_link_libraries(flmln PRIVATE mbgl-vendor-boost)
 
-set_target_properties(mbgl-core PROPERTIES
-  XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC "YES"
-)
+  # copied from platform/android/MapLibreAndroid/src/cpp/CMakeLists.txt
+  target_include_directories(flmln PRIVATE
+    ../android/src
+    ../android/MapLibreAndroid/src/cpp
+    ../../src
+    ../default/include
+  )
 
-set_target_properties(ios-sdk-static PROPERTIES
-  XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC "YES"
-)
+  target_sources(flmln PRIVATE
+    ../android/MapLibreAndroid/src/cpp/i18n/collator.cpp
+    ../android/MapLibreAndroid/src/cpp/i18n/number_format.cpp
+    ../android/MapLibreAndroid/src/cpp/http_file_source.cpp
+    ../android/MapLibreAndroid/src/cpp/logging_android.cpp
+    ../android/MapLibreAndroid/src/cpp/logger.cpp
+    ../android/MapLibreAndroid/src/cpp/java_types.cpp
+    ../android/MapLibreAndroid/src/cpp/text/local_glyph_rasterizer.cpp
+    ../android/MapLibreAndroid/src/cpp/java/util.cpp
+  )
+endif()
 
-set(CMAKE_OBJC_FLAGS "-fobjc-arc")
-set(CMAKE_OBJCXX_FLAGS "-fobjc-arc")
-target_compile_options(mbgl-core PRIVATE -fobjc-arc)
-target_compile_options(ios-sdk-static PRIVATE -fobjc-arc)
-
-set_target_properties(flmln PROPERTIES
-  FRAMEWORK TRUE
-  MACOSX_FRAMEWORK_IDENTIFIER "com.kekland.flmln"
-  XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.kekland.flmln"
-  XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC "YES"
-)
-
-# set_target_properties(FRAMEWORK)
+#####################################
+# Packaging configuration
+#####################################
+if (PLATFORM_IOS OR PLATFORM_MACOS)
+  set_target_properties(flmln PROPERTIES
+    FRAMEWORK TRUE
+    MACOSX_FRAMEWORK_IDENTIFIER "com.kekland.flmln"
+    XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.kekland.flmln"
+    XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC "YES"
+  )
+elseif (PLATFORM_ANDROID)
+  # TODO
+endif()
