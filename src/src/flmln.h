@@ -20,6 +20,9 @@ typedef void* mbgl_map_t;
 typedef void* flmln_map_observer_t;
 typedef void* flmln_renderer_frontend_t;
 typedef void* mbgl_camera_options_t;
+typedef void* mbgl_style_t;
+typedef void* mbgl_style_layer_t;
+typedef void* mbgl_style_background_layer_t;
 
 // ---------------------------------
 // mbgl_map_options_t
@@ -102,6 +105,15 @@ EXTERNC FLMLN_EXPORT void mbgl_map_destroy(mbgl_map_t map);
 EXTERNC FLMLN_EXPORT void mbgl_map_style_load_url(mbgl_map_t _map, const char* url);
 EXTERNC FLMLN_EXPORT void mbgl_map_jump_to(mbgl_map_t _map, mbgl_camera_options_t _cameraOptions);
 EXTERNC FLMLN_EXPORT void mbgl_map_set_size(mbgl_map_t _map, uint32_t width, uint32_t height);
+EXTERNC FLMLN_EXPORT mbgl_style_t mbgl_map_get_style(mbgl_map_t _map);
+
+// ---------------------------------
+// mbgl_style_t
+// ---------------------------------
+
+EXTERNC FLMLN_EXPORT mbgl_style_layer_t mbgl_style_get_layer(mbgl_style_t _style, const char* layerId);
+EXTERNC FLMLN_EXPORT void mbgl_style_background_layer_set_background_color(mbgl_style_layer_t _layer,
+                                                                           const char* color);
 
 // ---------------------------------
 // utils

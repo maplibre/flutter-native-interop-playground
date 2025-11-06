@@ -8,6 +8,8 @@
 #include "flmln/map_observer.hpp"
 #include "flmln/platform.hpp"
 #include "flmln/renderer_frontend.hpp"
+#include <mbgl/style/layer.hpp>
+#include <mbgl/style/layers/background_layer.hpp>
 
 int test_flmln() { return 42; }
 
@@ -198,6 +200,27 @@ void mbgl_map_jump_to(mbgl_map_t _map, mbgl_camera_options_t _cameraOptions) {
 void mbgl_map_set_size(mbgl_map_t _map, uint32_t width, uint32_t height) {
   auto* map = reinterpret_cast<mbgl::Map*>(_map);
   map->setSize({width, height});
+}
+
+mbgl_style_t mbgl_map_get_style(mbgl_map_t _map) {
+  auto* map = reinterpret_cast<mbgl::Map*>(_map);
+  auto& style = map->getStyle();
+  return reinterpret_cast<mbgl_style_t>(&style);
+}
+
+// ---------------------------------
+// mbgl_style_t
+// ---------------------------------
+
+mbgl_style_layer_t mbgl_style_get_layer(mbgl_style_t _style, const char* layerId) {
+  auto* style = reinterpret_cast<mbgl::style::Style*>(_style);
+  auto* layer = style->getLayer(std::string(layerId));
+  return reinterpret_cast<mbgl_style_layer_t>(layer);
+}
+
+void mbgl_style_background_layer_set_background_color(mbgl_style_layer_t _layer, const char* color) {
+  auto* layer = reinterpret_cast<mbgl::style::BackgroundLayer*>(_layer);
+  layer->setBackgroundColor(mbgl::style::PropertyValue<mbgl::Color>(mbgl::Color::parse(color).value()));
 }
 
 // ---------------------------------

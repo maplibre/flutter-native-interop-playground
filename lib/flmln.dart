@@ -142,6 +142,17 @@ class FlMlnWindgetState extends State<FlMlnWindget> {
             child: Text('Tick'),
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(64.0),
+          child: ElevatedButton(
+            onPressed: () {
+              final style = bindings.mbgl_map_get_style(map);
+              final layer = bindings.mbgl_style_get_layer(style, 'Background'.toNativeUtf8().cast());
+              bindings.mbgl_style_background_layer_set_background_color(layer, '#ff0000'.toNativeUtf8().cast());
+            },
+            child: Text('Set background to red'),
+          ),
+        ),
       ],
     );
   }

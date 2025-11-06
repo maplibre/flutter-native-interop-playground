@@ -514,6 +514,53 @@ class FlMlnBindings {
   );
   late final _mbgl_map_set_size = _mbgl_map_set_sizePtr.asFunction<void Function(mbgl_map_t, int, int)>();
 
+  mbgl_style_t mbgl_map_get_style(
+    mbgl_map_t _map,
+  ) {
+    return _mbgl_map_get_style(
+      _map,
+    );
+  }
+
+  late final _mbgl_map_get_stylePtr = _lookup<ffi.NativeFunction<mbgl_style_t Function(mbgl_map_t)>>(
+    'mbgl_map_get_style',
+  );
+  late final _mbgl_map_get_style = _mbgl_map_get_stylePtr.asFunction<mbgl_style_t Function(mbgl_map_t)>();
+
+  mbgl_style_layer_t mbgl_style_get_layer(
+    mbgl_style_t _style,
+    ffi.Pointer<ffi.Char> layerId,
+  ) {
+    return _mbgl_style_get_layer(
+      _style,
+      layerId,
+    );
+  }
+
+  late final _mbgl_style_get_layerPtr =
+      _lookup<ffi.NativeFunction<mbgl_style_layer_t Function(mbgl_style_t, ffi.Pointer<ffi.Char>)>>(
+        'mbgl_style_get_layer',
+      );
+  late final _mbgl_style_get_layer = _mbgl_style_get_layerPtr
+      .asFunction<mbgl_style_layer_t Function(mbgl_style_t, ffi.Pointer<ffi.Char>)>();
+
+  void mbgl_style_background_layer_set_background_color(
+    mbgl_style_layer_t _layer,
+    ffi.Pointer<ffi.Char> color,
+  ) {
+    return _mbgl_style_background_layer_set_background_color(
+      _layer,
+      color,
+    );
+  }
+
+  late final _mbgl_style_background_layer_set_background_colorPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(mbgl_style_layer_t, ffi.Pointer<ffi.Char>)>>(
+        'mbgl_style_background_layer_set_background_color',
+      );
+  late final _mbgl_style_background_layer_set_background_color = _mbgl_style_background_layer_set_background_colorPtr
+      .asFunction<void Function(mbgl_style_layer_t, ffi.Pointer<ffi.Char>)>();
+
   void flmln_utils_run_loop_once() {
     return _flmln_utils_run_loop_once();
   }
@@ -761,6 +808,9 @@ typedef mbgl_map_t = ffi.Pointer<ffi.Void>;
 typedef flmln_map_observer_t = ffi.Pointer<ffi.Void>;
 typedef flmln_renderer_frontend_t = ffi.Pointer<ffi.Void>;
 typedef mbgl_camera_options_t = ffi.Pointer<ffi.Void>;
+typedef mbgl_style_t = ffi.Pointer<ffi.Void>;
+typedef mbgl_style_layer_t = ffi.Pointer<ffi.Void>;
+typedef mbgl_style_background_layer_t = ffi.Pointer<ffi.Void>;
 
 enum MbglMapMode {
   MbglMapMode_Continuous(0),
