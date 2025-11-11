@@ -238,12 +238,12 @@ extension SpecFieldArrayDartUtils on SpecFieldArray {
       late final String cast;
 
       if (innerType is SpecFieldEnum) {
-        cast = 'v.toNativeList((e) => e._toNative())';
+        cast = '$varName.toNativeList((e) => e._toNative())';
       } else {
-        cast = 'v.toNativeList()';
+        cast = '$varName.toNativeList()';
       }
 
-      return '$cArrayCreateName(v.length, $cast)';
+      return '$cArrayCreateName($varName.length, $cast)';
     } else {
       var args = <String>[];
       for (var i = 0; i < length!; i++) {
@@ -256,8 +256,7 @@ extension SpecFieldArrayDartUtils on SpecFieldArray {
   String castNativeToDart(String varName) {
     if (length == null) {
       return '$varName.toDartList($cArrayLengthName, $cArrayGetAtName, (n) => ${innerType.castNativeToDart('n')})';
-    }
-    else {
+    } else {
       var args = <String>[];
       for (var i = 0; i < length!; i++) {
         args.add(innerType.castNativeToDart('$cArrayGetAtName($varName, $i)'));
@@ -269,6 +268,15 @@ extension SpecFieldArrayDartUtils on SpecFieldArray {
 
 extension SpecFieldDartUtils on SpecField {
   String get dartName => name.toCamelCase();
+
+  String get dartTypeNameAlias {
+    if (this is SpecFieldArray && (this as SpecFieldArray).length != null) {
+      final _this = this as SpecFieldArray;
+      return 'tuple_${_this.length}_${_this.innerType.dartTypeNameBase}';
+    }
+
+    return dartTypeNameBase;
+  }
 
   String get dartTypeNameBase {
     if (this is SpecFieldArray) {
@@ -293,6 +301,7 @@ extension SpecFieldDartUtils on SpecField {
 
   String get dartPropertyValueType {
     if (propertyType == 'constant') return dartTypeNameBase;
+    if (propertyType == 'color-ramp') return 'ColorRampPropertyValue';
     return 'PropertyValue<$dartTypeNameBase>';
   }
 
@@ -315,15 +324,21 @@ extension SpecFieldDartUtils on SpecField {
     if (this is SpecFieldEnum) return (this as SpecFieldEnum).castNativeToDart(varName);
     if (this is SpecFieldArray) return (this as SpecFieldArray).castNativeToDart(varName);
 
-    return switch(type) {
+    return switch (type) {
+      SpecFieldType.string => '$varName.cast<Utf8>().toDartString()',
       SpecFieldType.color => '$varName.toDartColor()',
       SpecFieldType.padding => '$varName.toDartPadding()',
+      SpecFieldType.formatted => '$varName as dynamic', // TODO
+      SpecFieldType.resolvedImage => '$varName as dynamic', // TODO
+      SpecFieldType.variableAnchorOffsetCollection => '$varName as dynamic', // TODO
       _ => varName,
     };
   }
 
   String dartPropertyValueFromNative(String varName) {
     if (propertyType == 'constant') return castNativeToDart(varName);
+    if (propertyType == 'color-ramp') return 'ColorRampPropertyValue.fromNative($varName)';
+
     return 'PropertyValue<$dartTypeNameBase>.fromNative($varName)';
   }
 
@@ -331,6 +346,8 @@ extension SpecFieldDartUtils on SpecField {
     if (propertyType == 'constant') return castDartToNative(varName);
     return '$varName.ptr';
   }
+
+  String get dartPropertyValueClassName => '_PropertyValue_${cPropertyValueTypeNameBase.toLowerCase()}';
 }
 
 Set<SpecField> getPropertyValues(List<SpecLayer> layers) {

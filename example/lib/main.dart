@@ -14,7 +14,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'aaaaaaaa',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData.from(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.dark,
+        ),
+      ),
       home: Scaffold(body: FlMlnWindget()),
       // home: Container(),
     );

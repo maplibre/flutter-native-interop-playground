@@ -8,6 +8,7 @@
 library;
 
 import 'dart:ffi' as ffi;
+import '' as self;
 
 @ffi.Native<ffi.Int Function()>()
 external int test_flmln();
@@ -197,6 +198,22 @@ external void mbgl_map_set_size(
 @ffi.Native<mbgl_style_t Function(mbgl_map_t)>()
 external mbgl_style_t mbgl_map_get_style(
   mbgl_map_t _map,
+);
+
+@ffi.Native<ffi.Pointer<ffi.Char> Function(mbgl_style_t)>()
+external ffi.Pointer<ffi.Char> mbgl_style_get_name(
+  mbgl_style_t _style,
+);
+
+@ffi.Native<ffi.Size Function(mbgl_style_t)>()
+external int mbgl_style_get_layers_length(
+  mbgl_style_t _style,
+);
+
+@ffi.Native<mbgl_style_layer_t Function(mbgl_style_t, ffi.Size)>()
+external mbgl_style_layer_t mbgl_style_get_layer_at(
+  mbgl_style_t _style,
+  int index,
 );
 
 @ffi.Native<mbgl_style_layer_t Function(mbgl_style_t, ffi.Pointer<ffi.Char>)>()
@@ -4179,6 +4196,178 @@ external void mbgl_style_background_layer_background_opacity_set(
   mbgl_style_property_value_float_t value_,
 );
 
+const addresses = _SymbolAddresses();
+
+class _SymbolAddresses {
+  const _SymbolAddresses();
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_map_options_t)>> get mbgl_map_options_destroy =>
+      ffi.Native.addressOf(self.mbgl_map_options_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_tile_server_options_t)>> get mbgl_tile_server_options_destroy =>
+      ffi.Native.addressOf(self.mbgl_tile_server_options_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_resource_options_t)>> get mbgl_resource_options_destroy =>
+      ffi.Native.addressOf(self.mbgl_resource_options_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(flmln_map_observer_t)>> get flmln_map_observer_destroy =>
+      ffi.Native.addressOf(self.flmln_map_observer_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(flmln_renderer_frontend_t)>> get flmln_renderer_frontend_destroy =>
+      ffi.Native.addressOf(self.flmln_renderer_frontend_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_camera_options_t)>> get mbgl_camera_options_destroy =>
+      ffi.Native.addressOf(self.mbgl_camera_options_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_map_t)>> get mbgl_map_destroy =>
+      ffi.Native.addressOf(self.mbgl_map_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_layer_t)>> get mbgl_style_layer_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_layer_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_color_t)>> get mbgl_color_destroy =>
+      ffi.Native.addressOf(self.mbgl_color_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_padding_t)>> get mbgl_padding_destroy =>
+      ffi.Native.addressOf(self.mbgl_padding_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_float_t)>>
+  get mbgl_style_property_value_float_destroy => ffi.Native.addressOf(self.mbgl_style_property_value_float_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_bool_t)>>
+  get mbgl_style_property_value_bool_destroy => ffi.Native.addressOf(self.mbgl_style_property_value_bool_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_color_t)>>
+  get mbgl_style_property_value_mbgl_color_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_color_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(std_array_float_2_t)>> get std_array_float_2_destroy =>
+      ffi.Native.addressOf(self.std_array_float_2_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_std_array_float_2_t)>>
+  get mbgl_style_property_value_std_array_float_2_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_std_array_float_2_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_fill_translate_anchor_t)>>
+  get mbgl_style_property_value_mbgl_style_fill_translate_anchor_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_fill_translate_anchor_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_expression_image_t)>>
+  get mbgl_style_property_value_mbgl_style_expression_image_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_expression_image_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_line_cap_t)>>
+  get mbgl_style_property_value_mbgl_style_line_cap_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_line_cap_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_line_join_t)>>
+  get mbgl_style_property_value_mbgl_style_line_join_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_line_join_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_line_translate_anchor_t)>>
+  get mbgl_style_property_value_mbgl_style_line_translate_anchor_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_line_translate_anchor_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(std_vector_float_t)>> get std_vector_float_destroy =>
+      ffi.Native.addressOf(self.std_vector_float_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_std_vector_float_t)>>
+  get mbgl_style_property_value_std_vector_float_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_std_vector_float_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_symbol_placement_t)>>
+  get mbgl_style_property_value_mbgl_style_symbol_placement_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_symbol_placement_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_symbol_z_order_t)>>
+  get mbgl_style_property_value_mbgl_style_symbol_z_order_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_symbol_z_order_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_icon_rotation_alignment_t)>>
+  get mbgl_style_property_value_mbgl_style_icon_rotation_alignment_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_icon_rotation_alignment_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_icon_text_fit_t)>>
+  get mbgl_style_property_value_mbgl_style_icon_text_fit_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_icon_text_fit_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(std_array_float_4_t)>> get std_array_float_4_destroy =>
+      ffi.Native.addressOf(self.std_array_float_4_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_std_array_float_4_t)>>
+  get mbgl_style_property_value_std_array_float_4_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_std_array_float_4_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_padding_t)>>
+  get mbgl_style_property_value_mbgl_padding_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_padding_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_icon_anchor_t)>>
+  get mbgl_style_property_value_mbgl_style_icon_anchor_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_icon_anchor_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_icon_pitch_alignment_t)>>
+  get mbgl_style_property_value_mbgl_style_icon_pitch_alignment_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_icon_pitch_alignment_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_text_pitch_alignment_t)>>
+  get mbgl_style_property_value_mbgl_style_text_pitch_alignment_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_text_pitch_alignment_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_text_rotation_alignment_t)>>
+  get mbgl_style_property_value_mbgl_style_text_rotation_alignment_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_text_rotation_alignment_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_expression_formatted_t)>>
+  get mbgl_style_property_value_mbgl_style_expression_formatted_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_expression_formatted_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(std_vector_const_char_t)>> get std_vector_const_char_destroy =>
+      ffi.Native.addressOf(self.std_vector_const_char_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_std_vector_const_char_t)>>
+  get mbgl_style_property_value_std_vector_const_char_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_std_vector_const_char_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_text_justify_t)>>
+  get mbgl_style_property_value_mbgl_style_text_justify_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_text_justify_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(std_vector_mbgl_style_text_variable_anchor_t)>>
+  get std_vector_mbgl_style_text_variable_anchor_destroy =>
+      ffi.Native.addressOf(self.std_vector_mbgl_style_text_variable_anchor_destroy);
+  ffi.Pointer<
+    ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_std_vector_mbgl_style_text_variable_anchor_t)>
+  >
+  get mbgl_style_property_value_std_vector_mbgl_style_text_variable_anchor_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_std_vector_mbgl_style_text_variable_anchor_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_variable_anchor_offset_collection_t)>>
+  get mbgl_style_property_value_mbgl_variable_anchor_offset_collection_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_variable_anchor_offset_collection_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_text_anchor_t)>>
+  get mbgl_style_property_value_mbgl_style_text_anchor_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_text_anchor_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(std_vector_mbgl_style_text_writing_mode_t)>>
+  get std_vector_mbgl_style_text_writing_mode_destroy =>
+      ffi.Native.addressOf(self.std_vector_mbgl_style_text_writing_mode_destroy);
+  ffi.Pointer<
+    ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_std_vector_mbgl_style_text_writing_mode_t)>
+  >
+  get mbgl_style_property_value_std_vector_mbgl_style_text_writing_mode_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_std_vector_mbgl_style_text_writing_mode_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_text_transform_t)>>
+  get mbgl_style_property_value_mbgl_style_text_transform_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_text_transform_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_icon_translate_anchor_t)>>
+  get mbgl_style_property_value_mbgl_style_icon_translate_anchor_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_icon_translate_anchor_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_text_translate_anchor_t)>>
+  get mbgl_style_property_value_mbgl_style_text_translate_anchor_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_text_translate_anchor_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_circle_translate_anchor_t)>>
+  get mbgl_style_property_value_mbgl_style_circle_translate_anchor_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_circle_translate_anchor_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_circle_pitch_scale_t)>>
+  get mbgl_style_property_value_mbgl_style_circle_pitch_scale_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_circle_pitch_scale_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_circle_pitch_alignment_t)>>
+  get mbgl_style_property_value_mbgl_style_circle_pitch_alignment_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_circle_pitch_alignment_destroy);
+  ffi.Pointer<
+    ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_fill_extrusion_translate_anchor_t)>
+  >
+  get mbgl_style_property_value_mbgl_style_fill_extrusion_translate_anchor_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_fill_extrusion_translate_anchor_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_raster_resampling_t)>>
+  get mbgl_style_property_value_mbgl_style_raster_resampling_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_raster_resampling_destroy);
+  ffi.Pointer<
+    ffi.NativeFunction<ffi.Void Function(mbgl_style_property_value_mbgl_style_hillshade_illumination_anchor_t)>
+  >
+  get mbgl_style_property_value_mbgl_style_hillshade_illumination_anchor_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_property_value_mbgl_style_hillshade_illumination_anchor_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_fill_layer_t)>> get mbgl_style_fill_layer_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_fill_layer_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_line_layer_t)>> get mbgl_style_line_layer_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_line_layer_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_symbol_layer_t)>> get mbgl_style_symbol_layer_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_symbol_layer_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_circle_layer_t)>> get mbgl_style_circle_layer_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_circle_layer_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_heatmap_layer_t)>> get mbgl_style_heatmap_layer_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_heatmap_layer_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_fill_extrusion_layer_t)>>
+  get mbgl_style_fill_extrusion_layer_destroy => ffi.Native.addressOf(self.mbgl_style_fill_extrusion_layer_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_raster_layer_t)>> get mbgl_style_raster_layer_destroy =>
+      ffi.Native.addressOf(self.mbgl_style_raster_layer_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_hillshade_layer_t)>>
+  get mbgl_style_hillshade_layer_destroy => ffi.Native.addressOf(self.mbgl_style_hillshade_layer_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_background_layer_t)>>
+  get mbgl_style_background_layer_destroy => ffi.Native.addressOf(self.mbgl_style_background_layer_destroy);
+}
+
 typedef __int8_t = ffi.SignedChar;
 typedef Dart__int8_t = int;
 typedef __uint8_t = ffi.UnsignedChar;
@@ -4426,7 +4615,6 @@ typedef mbgl_style_property_value_t = ffi.Pointer<ffi.Void>;
 typedef mbgl_color_t = ffi.Pointer<ffi.Void>;
 typedef mbgl_padding_t = ffi.Pointer<ffi.Void>;
 typedef mbgl_variable_anchor_offset_collection_t = ffi.Pointer<ffi.Void>;
-typedef mbgl_property_value_t = ffi.Pointer<ffi.Void>;
 
 enum MbglMapMode {
   MbglMapMode_Continuous(0),

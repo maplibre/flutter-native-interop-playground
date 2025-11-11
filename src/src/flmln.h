@@ -30,7 +30,6 @@ typedef void* mbgl_style_property_value_t;
 typedef void* mbgl_color_t;
 typedef void* mbgl_padding_t;
 typedef void* mbgl_variable_anchor_offset_collection_t;
-typedef void* mbgl_property_value_t;
 
 // ---------------------------------
 // mbgl_map_options_t
@@ -119,14 +118,15 @@ EXTERNC FLMLN_EXPORT mbgl_style_t mbgl_map_get_style(mbgl_map_t _map);
 // mbgl_style_t
 // ---------------------------------
 
+EXTERNC FLMLN_EXPORT char* mbgl_style_get_name(mbgl_style_t _style);
+
+EXTERNC FLMLN_EXPORT size_t mbgl_style_get_layers_length(mbgl_style_t _style);
+EXTERNC FLMLN_EXPORT mbgl_style_layer_t mbgl_style_get_layer_at(mbgl_style_t _style, size_t index);
+
 EXTERNC FLMLN_EXPORT mbgl_style_layer_t mbgl_style_get_layer(mbgl_style_t _style, const char* layerId);
 EXTERNC FLMLN_EXPORT void mbgl_style_add_layer(mbgl_style_t _style, mbgl_style_layer_t _layer,
                                                const char* beforeLayerId);
 EXTERNC FLMLN_EXPORT mbgl_style_layer_t mbgl_style_remove_layer(mbgl_style_t _style, const char* layerId);
-
-// ---------------------------------
-// mbgl_style_expression_t
-// ---------------------------------
 
 // ---------------------------------
 // mbgl_style_layer_t

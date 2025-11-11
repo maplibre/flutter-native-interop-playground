@@ -26,16 +26,16 @@ extension ToNativeListEnum<T extends Enum> on List<T> {
 }
 
 extension ToNativeListString on List<String> {
-  Pointer<Pointer<Char>> toNativeList() {
-    final ptr = malloc.allocate<Pointer<Char>>(length * sizeOf<Pointer<Char>>());
+  Pointer<Pointer<Char>> toNativeList({Allocator allocator = malloc}) {
+    final ptr = allocator.allocate<Pointer<Char>>(length * sizeOf<Pointer<Char>>());
     for (var i = 0; i < length; i++) ptr[i] = this[i].toNativeUtf8().cast();
     return ptr;
   }
 }
 
 extension ToNativeListFloat on List<double> {
-  Pointer<Float> toNativeList() {
-    final ptr = malloc.allocate<Float>(length * sizeOf<Float>());
+  Pointer<Float> toNativeList({Allocator allocator = malloc}) {
+    final ptr = allocator.allocate<Float>(length * sizeOf<Float>());
     for (var i = 0; i < length; i++) ptr[i] = this[i];
     return ptr;
   }

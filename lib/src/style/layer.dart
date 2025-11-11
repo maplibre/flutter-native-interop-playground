@@ -57,10 +57,10 @@ enum LayerType {
 }
 
 abstract class Layer extends NativeOwning<mbgl_style_layer_t> {
-  Layer.fromNative({required super.ptr, super.ownedByDart = false});
+  Layer._fromNative(super.ptr, {super.ownedByDart = false});
 
-  Layer({
-    required super.ptr,
+  Layer._(
+    super.ptr, {
     String? sourceLayer,
     double? minZoom,
     double? maxZoom,
@@ -98,4 +98,11 @@ abstract class Layer extends NativeOwning<mbgl_style_layer_t> {
 
   /// A expression specifying conditions on source features. Only features that match the filter are displayed. Zoom expressions in filters are only evaluated at integer zoom levels. The `feature-state` expression is not supported in filter expressions.
   // final dynamic filter;
+
+  Map<String, Object> get properties => {
+    'sourceId': sourceId,
+    'sourceLayer': sourceLayer,
+    'minZoom': minZoom,
+    'maxZoom': maxZoom,
+  };
 }

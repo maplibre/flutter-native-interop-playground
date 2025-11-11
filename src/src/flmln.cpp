@@ -220,6 +220,27 @@ mbgl_style_t mbgl_map_get_style(mbgl_map_t _map) {
 // mbgl_style_t
 // ---------------------------------
 
+char* mbgl_style_get_name(mbgl_style_t _style) {
+  auto* style = reinterpret_cast<mbgl::style::Style*>(_style);
+  auto name = style->getName();
+  return strdup(name.c_str());
+}
+
+size_t mbgl_style_get_layers_length(mbgl_style_t _style) {
+  auto* style = reinterpret_cast<mbgl::style::Style*>(_style);
+  auto layers = style->getLayers();
+  return layers.size();
+}
+
+mbgl_style_layer_t mbgl_style_get_layer_at(mbgl_style_t _style, size_t index) {
+  auto* style = reinterpret_cast<mbgl::style::Style*>(_style);
+  auto layers = style->getLayers();
+  if (index >= layers.size()) return nullptr;
+
+  auto* layer = layers[index];
+  return reinterpret_cast<mbgl_style_layer_t>(layer);
+}
+
 mbgl_style_layer_t mbgl_style_get_layer(mbgl_style_t _style, const char* layerId) {
   auto* style = reinterpret_cast<mbgl::style::Style*>(_style);
   auto* layer = style->getLayer(std::string(layerId));
@@ -251,10 +272,7 @@ void mbgl_style_layer_destroy(mbgl_style_layer_t _layer) { delete reinterpret_ca
 const char* mbgl_style_layer_get_id(mbgl_style_layer_t _layer) {
   auto* layer = reinterpret_cast<mbgl::style::Layer*>(_layer);
   auto id = layer->getID();
-
-  auto* test = reinterpret_cast<mbgl::style::LineLayer*>(_layer);
-  test->getLineColor().isUndefined();
-  return id.c_str();
+  return strdup(id.c_str());
 }
 
 std::map<std::string, MbglStyleLayerType> layerTypeMap = {

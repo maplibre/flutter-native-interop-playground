@@ -26,6 +26,8 @@ const dartPreamble = [
   '// GENERATED CODE - DO NOT MODIFY BY HAND',
   '// Generated via tool/generate_style.dart',
   '',
+  '// ignore_for_file: camel_case_types',
+  '',
   'part of "package:flmln/src/style/layer.dart";',
   '',
 ];

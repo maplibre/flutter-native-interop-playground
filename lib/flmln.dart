@@ -3,6 +3,7 @@ import 'dart:ffi' hide Size;
 import 'package:ffi/ffi.dart';
 import 'package:flmln/keys.dart';
 import 'package:flmln/src/style/style.dart';
+import 'package:flmln/style_inspector.dart';
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -86,100 +87,113 @@ class FlMlnWindgetState extends State<FlMlnWindget> with WidgetsBindingObserver 
 
   @override
   Widget build(BuildContext context) {
-    return FlutterMap(
+    return Row(
       children: [
-        if (enabled)
-          CustomPaint(
-            painter: _MapPainter(
-              pixelRatio: MediaQuery.devicePixelRatioOf(context),
-              rendererFrontend: rendererFrontend,
-              map: map,
-              repaint: repaint,
-            ),
-            child: SizedBox.expand(),
-          ),
-        Builder(
-          builder: (context) {
-            final camera = MapCamera.of(context);
-            final cameraOptions = mbgl_camera_options_create();
-            mbgl_camera_options_set_center(cameraOptions, camera.center.latitude, camera.center.longitude);
-            mbgl_camera_options_set_zoom(cameraOptions, camera.zoom - 1);
-            mbgl_camera_options_set_bearing(cameraOptions, -camera.rotation);
-            mbgl_map_jump_to(map, cameraOptions);
-            mbgl_camera_options_destroy(cameraOptions);
-            return SizedBox.expand(
-              child: Texture(
-                textureId: flmln_renderer_frontend_get_texture_id(rendererFrontend),
-              ),
-            );
-          },
+        Drawer(
+          width: 320.0,
+          child: enabled ? StyleInspector(style: Style.fromNative(mbgl_map_get_style(map))) : null,
         ),
-        // Opacity(
-        //   opacity: 0.0,
-        //   child: TileLayer(
-        //     urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-        //     userAgentPackageName: 'com.kekland.flmln_example',
-        //   ),
-        // ),
-        MarkerLayer(
-          markers: [
-            // Kyiv
-            Marker(
-              point: LatLng(50.4501, 30.5234),
-              width: 80,
-              height: 80,
-              child: Icon(
-                Icons.location_on,
-                color: Colors.red,
-                size: 40,
-              ),
+        Expanded(
+          child: FlutterMap(
+            options: MapOptions(
+              backgroundColor: Colors.black,
             ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.all(64.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 8.0,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  if (!enabled) enabled = true;
-                  setState(() {});
-                },
-                child: Text('Tick'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  final style = Style.fromNative(mbgl_map_get_style(map));
-                  final backgroundLayer = style.getLayer<BackgroundLayer>('Background');
-                  print(backgroundLayer.backgroundColor.asConstant);
-                  if (backgroundLayer.backgroundColor.asConstant == Colors.blue) {
-                    backgroundLayer.backgroundColor = PropertyValue.constant(Colors.green);
-                  } else {
-                    backgroundLayer.backgroundColor = PropertyValue.constant(Colors.blue);
-                  }
-                },
-                child: Text('Toggle Background'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  final layer = FillLayer(
-                    id: 'my-fill-layer',
-                    sourceId: 'maptiler_planet',
-                    fillColor: PropertyValue.constant(Colors.purple),
-                    fillOpacity: PropertyValue.constant(0.5),
-                    sourceLayer: 'landuse',
+              if (enabled)
+                CustomPaint(
+                  painter: _MapPainter(
+                    pixelRatio: MediaQuery.devicePixelRatioOf(context),
+                    rendererFrontend: rendererFrontend,
+                    map: map,
+                    repaint: repaint,
+                  ),
+                  child: SizedBox.expand(),
+                ),
+              Builder(
+                builder: (context) {
+                  final camera = MapCamera.of(context);
+                  final cameraOptions = mbgl_camera_options_create();
+                  mbgl_camera_options_set_center(cameraOptions, camera.center.latitude, camera.center.longitude);
+                  mbgl_camera_options_set_zoom(cameraOptions, camera.zoom - 1);
+                  mbgl_camera_options_set_bearing(cameraOptions, -camera.rotation);
+                  mbgl_map_jump_to(map, cameraOptions);
+                  mbgl_camera_options_destroy(cameraOptions);
+                  return SizedBox.expand(
+                    child: Texture(
+                      textureId: flmln_renderer_frontend_get_texture_id(rendererFrontend),
+                    ),
                   );
-
-                  // change parameters
-                  layer.fillColor = PropertyValue.constant(Colors.orange);
-
-                  // insert layer
-                  final style = Style.fromNative(mbgl_map_get_style(map));
-                  style.addLayer(layer);
                 },
-                child: Text('Insert layer'),
+              ),
+              // Opacity(
+              //   opacity: 0.0,
+              //   child: TileLayer(
+              //     urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              //     userAgentPackageName: 'com.kekland.flmln_example',
+              //   ),
+              // ),
+              MarkerLayer(
+                markers: [
+                  // Kyiv
+                  Marker(
+                    point: LatLng(50.4501, 30.5234),
+                    width: 80,
+                    height: 80,
+                    child: Icon(
+                      Icons.location_on,
+                      color: Colors.red,
+                      size: 40,
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(64.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 8.0,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        if (!enabled) enabled = true;
+                        setState(() {});
+                      },
+                      child: Text('Tick'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        final style = Style.fromNative(mbgl_map_get_style(map));
+                        final backgroundLayer = style.getLayer<BackgroundLayer>('Background');
+                        print(backgroundLayer.backgroundColor.asConstant);
+                        if (backgroundLayer.backgroundColor.asConstant == Colors.blue) {
+                          backgroundLayer.backgroundColor = PropertyValue.constant(Colors.green);
+                        } else {
+                          backgroundLayer.backgroundColor = PropertyValue.constant(Colors.blue);
+                        }
+                      },
+                      child: Text('Toggle Background'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        final layer = FillLayer(
+                          id: 'my-fill-layer',
+                          sourceId: 'maptiler_planet',
+                          fillColor: PropertyValue.constant(Colors.purple),
+                          fillOpacity: PropertyValue.constant(0.5),
+                          sourceLayer: 'landuse',
+                        );
+
+                        // change parameters
+                        layer.fillColor = PropertyValue.constant(Colors.orange);
+
+                        // insert layer
+                        final style = Style.fromNative(mbgl_map_get_style(map));
+                        style.addLayer(layer);
+                      },
+                      child: Text('Insert layer'),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

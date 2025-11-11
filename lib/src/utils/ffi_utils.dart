@@ -10,17 +10,26 @@ extension ReadCharPtr on Pointer<Char> {
   }
 }
 
-class NativeOwning<T extends Pointer> {
-  NativeOwning({required this.ptr, required this.ownedByDart});
+abstract class NativeOwning<T extends Pointer> implements Finalizable {
+  NativeOwning(this.ptr, {required this.ownedByDart}) {
+    if (ownedByDart) attachFinalizer();
+  }
 
   final T ptr;
   bool ownedByDart;
 
+  void attachFinalizer();
+  void detachFinalizer();
+
   void setOwnershipToDart() {
+    if (ownedByDart) return;
     ownedByDart = true;
+    attachFinalizer();
   }
 
   void setOwnershipToNative() {
+    if (!ownedByDart) return;
     ownedByDart = false;
+    detachFinalizer();
   }
 }
