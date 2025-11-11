@@ -1,4 +1,6 @@
 import CoreImage
+import CoreVideo
+import CoreGraphics
 import Foundation
 import Metal
 
@@ -31,7 +33,11 @@ public func FlMlnMetalFlutterTexture_updateBuffer(
 
 @objc public class FlMlnMetalFlutterTexture: NSObject, FlutterTexture {
   public override init() {
-    self.ciContext = CIContext(mtlDevice: MTLCreateSystemDefaultDevice()!)
+    let options: [CIContextOption: Any] = [
+      .outputColorSpace: CGColorSpace(name: CGColorSpace.sRGB)!,
+    ]
+
+    self.ciContext = CIContext(mtlDevice: MTLCreateSystemDefaultDevice()!, options: options)
     super.init()
   }
 
@@ -63,6 +69,7 @@ public func FlMlnMetalFlutterTexture_updateBuffer(
         kCVPixelBufferCGImageCompatibilityKey as String: true,
         kCVPixelBufferMetalCompatibilityKey as String: true,
         kCVPixelBufferOpenGLCompatibilityKey as String: true,
+        kCVImageBufferCGColorSpaceKey as String: CGColorSpace(name: CGColorSpace.sRGB)!,
       ]
 
       let status = CVPixelBufferPoolCreate(
@@ -91,7 +98,12 @@ public func FlMlnMetalFlutterTexture_updateBuffer(
 
     // Render into buffer
     CVPixelBufferLockBaseAddress(buffer, [])
-    let ciImage = CIImage(mtlTexture: texture, options: nil)!
+
+    let ciImageOptions: [CIImageOption: Any] = [
+      .colorSpace: CGColorSpace(name: CGColorSpace.sRGB)!
+    ]
+
+    let ciImage = CIImage(mtlTexture: texture, options: ciImageOptions)!
     let transform = CGAffineTransform(translationX: 0, y: ciImage.extent.height).scaledBy(
       x: 1, y: -1)
     let flippedImage = ciImage.transformed(by: transform)

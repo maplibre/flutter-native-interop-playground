@@ -7,6 +7,7 @@ import 'package:flmln/style_inspector.dart';
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:metal_capture_util/metal_capture_util.dart';
 
 import 'gen/flmln_bindings.dart';
 
@@ -191,6 +192,12 @@ class FlMlnWindgetState extends State<FlMlnWindget> with WidgetsBindingObserver 
                         style.addLayer(layer);
                       },
                       child: Text('Insert layer'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        MetalCapture.captureNextFrame(reassemble: true, openFile: true);
+                      },
+                      child: Text('Metal capture'),
                     ),
                   ],
                 ),
