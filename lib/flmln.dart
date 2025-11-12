@@ -4,6 +4,8 @@ import 'package:ffi/ffi.dart';
 import 'package:flmln/keys.dart';
 import 'package:flmln/src/style/style.dart';
 import 'package:flmln/style_inspector.dart';
+import 'package:flmln/src/widgets/flmln_renderer.dart';
+import 'package:flmln/src/widgets/flutter_map_flmln.dart';
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -26,6 +28,7 @@ typedef VoidCallback = Void Function();
 
 class FlMlnWindgetState extends State<FlMlnWindget> with WidgetsBindingObserver {
   var enabled = false;
+  var isRasterOverlayEnabled = false;
 
   late mbgl_tile_server_options_t tileServerOptions;
   late flmln_renderer_frontend_t rendererFrontend;
@@ -60,34 +63,20 @@ class FlMlnWindgetState extends State<FlMlnWindget> with WidgetsBindingObserver 
     );
 
     mbgl_map_style_load_url(map, styleUrl.toNativeUtf8().cast());
-
-    final onTick = NativeCallable<VoidCallback>.listener(_onTick);
-    flmln_renderer_frontend_set_invalidate_callback(rendererFrontend, onTick.nativeFunction);
-
-    WidgetsBinding.instance.addPersistentFrameCallback((_) {
-      flmln_utils_run_loop_once();
-    });
-
-    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void didHaveMemoryPressure() {
-    print('didHaveMemoryPressure');
+    flmln_renderer_frontend_reduce_memory_use(rendererFrontend);
     super.didHaveMemoryPressure();
-  }
-
-  void _onTick() {
-    // print('tick');
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        repaint.notifyListeners();
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    // NYC
+    final initialPosition = LatLng(40.7128, -74.0060);
+    final initialZoom = 12.0;
+
     return Row(
       children: [
         Drawer(
@@ -98,46 +87,27 @@ class FlMlnWindgetState extends State<FlMlnWindget> with WidgetsBindingObserver 
           child: FlutterMap(
             options: MapOptions(
               backgroundColor: Colors.black,
+              initialCenter: initialPosition,
+              initialZoom: initialZoom,
             ),
             children: [
-              if (enabled)
-                CustomPaint(
-                  painter: _MapPainter(
-                    pixelRatio: MediaQuery.devicePixelRatioOf(context),
-                    rendererFrontend: rendererFrontend,
-                    map: map,
-                    repaint: repaint,
+              if (enabled) FlutterMapFlMlnWidget(map: map, rendererFrontend: rendererFrontend),
+
+              if (isRasterOverlayEnabled)
+                Opacity(
+                  opacity: 0.5,
+                  child: TileLayer(
+                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'com.kekland.flmln_example',
                   ),
-                  child: SizedBox.expand(),
                 ),
-              Builder(
-                builder: (context) {
-                  final camera = MapCamera.of(context);
-                  final cameraOptions = mbgl_camera_options_create();
-                  mbgl_camera_options_set_center(cameraOptions, camera.center.latitude, camera.center.longitude);
-                  mbgl_camera_options_set_zoom(cameraOptions, camera.zoom - 1);
-                  mbgl_camera_options_set_bearing(cameraOptions, -camera.rotation);
-                  mbgl_map_jump_to(map, cameraOptions);
-                  mbgl_camera_options_destroy(cameraOptions);
-                  return SizedBox.expand(
-                    child: Texture(
-                      textureId: flmln_renderer_frontend_get_texture_id(rendererFrontend),
-                    ),
-                  );
-                },
-              ),
-              // Opacity(
-              //   opacity: 0.0,
-              //   child: TileLayer(
-              //     urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              //     userAgentPackageName: 'com.kekland.flmln_example',
-              //   ),
-              // ),
+
+              // Example marker
               MarkerLayer(
                 markers: [
                   // Kyiv
                   Marker(
-                    point: LatLng(50.4501, 30.5234),
+                    point: initialPosition,
                     width: 80,
                     height: 80,
                     child: Icon(
@@ -148,31 +118,27 @@ class FlMlnWindgetState extends State<FlMlnWindget> with WidgetsBindingObserver 
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(64.0),
+
+              // Actions
+              SafeArea(
+                minimum: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 8.0,
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        if (!enabled) enabled = true;
+                        enabled = !enabled;
                         setState(() {});
                       },
-                      child: Text('Tick'),
+                      child: Text('Toggle'),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        final style = Style.fromNative(mbgl_map_get_style(map));
-                        final backgroundLayer = style.getLayer<BackgroundLayer>('Background');
-                        print(backgroundLayer.backgroundColor.asConstant);
-                        if (backgroundLayer.backgroundColor.asConstant == Colors.blue) {
-                          backgroundLayer.backgroundColor = PropertyValue.constant(Colors.green);
-                        } else {
-                          backgroundLayer.backgroundColor = PropertyValue.constant(Colors.blue);
-                        }
+                        isRasterOverlayEnabled = !isRasterOverlayEnabled;
+                        setState(() {});
                       },
-                      child: Text('Toggle Background'),
+                      child: Text('Toggle raster overlay'),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -208,33 +174,4 @@ class FlMlnWindgetState extends State<FlMlnWindget> with WidgetsBindingObserver 
       ],
     );
   }
-}
-
-class _MapPainter extends CustomPainter {
-  _MapPainter({
-    super.repaint,
-    required this.rendererFrontend,
-    required this.map,
-    required this.pixelRatio,
-  });
-
-  final flmln_renderer_frontend_t rendererFrontend;
-  final mbgl_map_t map;
-  final double pixelRatio;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    // print('paint');
-    mbgl_map_set_size(map, size.width.toInt(), size.height.toInt());
-    flmln_renderer_frontend_set_size_and_pixel_ratio(
-      rendererFrontend,
-      size.width.toInt(),
-      size.height.toInt(),
-      pixelRatio,
-    );
-    flmln_renderer_frontend_render(rendererFrontend);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

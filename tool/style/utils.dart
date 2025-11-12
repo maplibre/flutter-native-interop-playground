@@ -1,3 +1,11 @@
+import 'dart:io';
+
+import 'package:path/path.dart' as p;
+
+final scriptDir = p.dirname(Platform.script.toFilePath());
+final projectRoot = p.normalize(p.join(scriptDir, '..'));
+
+
 List<T> jsonListAs<T>(dynamic list) => (list as List<dynamic>).cast<T>();
 Map<String, T> jsonMapAs<T>(dynamic map) => (map as Map<String, dynamic>).cast<String, T>();
 

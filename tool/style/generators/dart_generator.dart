@@ -42,14 +42,14 @@ class DartGenerator {
     c.add('    super.minZoom,');
     c.add('    super.maxZoom,');
 
-    final idPtrCast = 'withZoneArena(() => id.toNativeUtf8(allocator: zoneArena).cast())';
-    final sourceIdPtrCast = 'withZoneArena(() => sourceId.toNativeUtf8(allocator: zoneArena).cast())';
+    final idPtrCast = 'id.toNativeUtf8(allocator: zoneArena).cast()';
+    final sourceIdPtrCast = 'sourceId.toNativeUtf8(allocator: zoneArena).cast()';
 
     if (layer.type != 'background') {
       c.add('    super.sourceLayer,');
-      c.add('  }): super._(${layer.cCreateFnName}($idPtrCast, $sourceIdPtrCast)) {');
+      c.add('  }): super._(withZoneArena(() => ${layer.cCreateFnName}($idPtrCast, $sourceIdPtrCast))) {');
     } else {
-      c.add('  }): super._(${layer.cCreateFnName}($idPtrCast)) {');
+      c.add('  }): super._(withZoneArena(() => ${layer.cCreateFnName}($idPtrCast))) {');
     }
 
     for (var i = 0; i < fields.length; i++) {

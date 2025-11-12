@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #define FLMLN_EXPORT __attribute__((__visibility__("default"))) __attribute__((__used__))
 
@@ -8,6 +9,8 @@
 #else
 #define EXTERNC
 #endif
+
+#define FFI EXTERNC FLMLN_EXPORT
 
 EXTERNC FLMLN_EXPORT int test_flmln();
 EXTERNC FLMLN_EXPORT void flmln_initialize();
@@ -30,22 +33,6 @@ typedef void* mbgl_style_property_value_t;
 typedef void* mbgl_color_t;
 typedef void* mbgl_padding_t;
 typedef void* mbgl_variable_anchor_offset_collection_t;
-
-// ---------------------------------
-// mbgl_map_options_t
-// ---------------------------------
-
-EXTERNC FLMLN_EXPORT mbgl_map_options_t mbgl_map_options_create();
-EXTERNC FLMLN_EXPORT void mbgl_map_options_destroy(mbgl_map_options_t _mapOptions);
-
-enum MbglMapMode {
-  MbglMapMode_Continuous = 0,
-  MbglMapMode_Static = 1,
-  MbglMapMode_Tile = 2,
-};
-EXTERNC FLMLN_EXPORT void mbgl_map_options_set_mode(mbgl_map_options_t _mapOptions, enum MbglMapMode mode);
-EXTERNC FLMLN_EXPORT void mbgl_map_options_set_size(mbgl_map_options_t _mapOptions, uint32_t width, uint32_t height);
-EXTERNC FLMLN_EXPORT void mbgl_map_options_set_pixel_ratio(mbgl_map_options_t _mapOptions, float pixelRatio);
 
 // ----------------------------------
 // mbgl_tile_server_options_t
@@ -88,6 +75,10 @@ EXTERNC FLMLN_EXPORT void flmln_renderer_frontend_set_size_and_pixel_ratio(flmln
 EXTERNC FLMLN_EXPORT int64_t flmln_renderer_frontend_get_texture_id(flmln_renderer_frontend_t _rendererFrontend);
 EXTERNC FLMLN_EXPORT void flmln_renderer_frontend_set_invalidate_callback(flmln_renderer_frontend_t _rendererFrontend,
                                                                           void (*invalidateCallback)(void));
+EXTERNC FLMLN_EXPORT void flmln_renderer_frontend_reduce_memory_use(flmln_renderer_frontend_t _rendererFrontend);
+EXTERNC FLMLN_EXPORT void flmln_renderer_frontend_set_tile_cache_enabled(flmln_renderer_frontend_t _rendererFrontend,
+                                                                         bool enabled);
+EXTERNC FLMLN_EXPORT bool flmln_renderer_frontend_get_tile_cache_enabled(flmln_renderer_frontend_t _rendererFrontend);
 
 // ---------------------------------
 // mbgl_camera_options_t

@@ -9,3 +9,5 @@ lib/keys.dart
 **/.DS_Store
 **/*.so
 **/*.dylib
+
+__pycache__

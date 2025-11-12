@@ -16,41 +16,6 @@ external int test_flmln();
 @ffi.Native<ffi.Void Function()>()
 external void flmln_initialize();
 
-@ffi.Native<mbgl_map_options_t Function()>()
-external mbgl_map_options_t mbgl_map_options_create();
-
-@ffi.Native<ffi.Void Function(mbgl_map_options_t)>()
-external void mbgl_map_options_destroy(
-  mbgl_map_options_t _mapOptions,
-);
-
-@ffi.Native<ffi.Void Function(mbgl_map_options_t, ffi.UnsignedInt)>(symbol: 'mbgl_map_options_set_mode')
-external void _mbgl_map_options_set_mode(
-  mbgl_map_options_t _mapOptions,
-  int mode,
-);
-
-void mbgl_map_options_set_mode(
-  mbgl_map_options_t _mapOptions,
-  MbglMapMode mode,
-) => _mbgl_map_options_set_mode(
-  _mapOptions,
-  mode.value,
-);
-
-@ffi.Native<ffi.Void Function(mbgl_map_options_t, ffi.Uint32, ffi.Uint32)>()
-external void mbgl_map_options_set_size(
-  mbgl_map_options_t _mapOptions,
-  int width,
-  int height,
-);
-
-@ffi.Native<ffi.Void Function(mbgl_map_options_t, ffi.Float)>()
-external void mbgl_map_options_set_pixel_ratio(
-  mbgl_map_options_t _mapOptions,
-  double pixelRatio,
-);
-
 @ffi.Native<mbgl_tile_server_options_t Function()>()
 external mbgl_tile_server_options_t mbgl_tile_server_options_create();
 
@@ -126,6 +91,22 @@ external int flmln_renderer_frontend_get_texture_id(
 external void flmln_renderer_frontend_set_invalidate_callback(
   flmln_renderer_frontend_t _rendererFrontend,
   ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>> invalidateCallback,
+);
+
+@ffi.Native<ffi.Void Function(flmln_renderer_frontend_t)>()
+external void flmln_renderer_frontend_reduce_memory_use(
+  flmln_renderer_frontend_t _rendererFrontend,
+);
+
+@ffi.Native<ffi.Void Function(flmln_renderer_frontend_t, ffi.Bool)>()
+external void flmln_renderer_frontend_set_tile_cache_enabled(
+  flmln_renderer_frontend_t _rendererFrontend,
+  bool enabled,
+);
+
+@ffi.Native<ffi.Bool Function(flmln_renderer_frontend_t)>()
+external bool flmln_renderer_frontend_get_tile_cache_enabled(
+  flmln_renderer_frontend_t _rendererFrontend,
 );
 
 @ffi.Native<mbgl_camera_options_t Function()>()
@@ -4196,12 +4177,26 @@ external void mbgl_style_background_layer_background_opacity_set(
   mbgl_style_property_value_float_t value_,
 );
 
+@ffi.Native<ffi.Pointer<MBGL_UTIL_UNIT_BEZIER> Function()>()
+external ffi.Pointer<MBGL_UTIL_UNIT_BEZIER> mbgl_util_unit_bezier_create();
+
+@ffi.Native<ffi.Void Function(ffi.Pointer<MBGL_UTIL_UNIT_BEZIER>)>()
+external void mbgl_util_unit_bezier_destroy(
+  ffi.Pointer<MBGL_UTIL_UNIT_BEZIER> instance,
+);
+
+@ffi.Native<ffi.Pointer<MBGL_ANIMATION_OPTIONS> Function()>()
+external ffi.Pointer<MBGL_ANIMATION_OPTIONS> mbgl_animation_options_create();
+
+@ffi.Native<ffi.Void Function(ffi.Pointer<MBGL_ANIMATION_OPTIONS>)>()
+external void mbgl_animation_options_destroy(
+  ffi.Pointer<MBGL_ANIMATION_OPTIONS> instance,
+);
+
 const addresses = _SymbolAddresses();
 
 class _SymbolAddresses {
   const _SymbolAddresses();
-  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_map_options_t)>> get mbgl_map_options_destroy =>
-      ffi.Native.addressOf(self.mbgl_map_options_destroy);
   ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_tile_server_options_t)>> get mbgl_tile_server_options_destroy =>
       ffi.Native.addressOf(self.mbgl_tile_server_options_destroy);
   ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_resource_options_t)>> get mbgl_resource_options_destroy =>
@@ -4366,6 +4361,10 @@ class _SymbolAddresses {
   get mbgl_style_hillshade_layer_destroy => ffi.Native.addressOf(self.mbgl_style_hillshade_layer_destroy);
   ffi.Pointer<ffi.NativeFunction<ffi.Void Function(mbgl_style_background_layer_t)>>
   get mbgl_style_background_layer_destroy => ffi.Native.addressOf(self.mbgl_style_background_layer_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<MBGL_UTIL_UNIT_BEZIER>)>>
+  get mbgl_util_unit_bezier_destroy => ffi.Native.addressOf(self.mbgl_util_unit_bezier_destroy);
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<MBGL_ANIMATION_OPTIONS>)>>
+  get mbgl_animation_options_destroy => ffi.Native.addressOf(self.mbgl_animation_options_destroy);
 }
 
 typedef __int8_t = ffi.SignedChar;
@@ -4615,22 +4614,6 @@ typedef mbgl_style_property_value_t = ffi.Pointer<ffi.Void>;
 typedef mbgl_color_t = ffi.Pointer<ffi.Void>;
 typedef mbgl_padding_t = ffi.Pointer<ffi.Void>;
 typedef mbgl_variable_anchor_offset_collection_t = ffi.Pointer<ffi.Void>;
-
-enum MbglMapMode {
-  MbglMapMode_Continuous(0),
-  MbglMapMode_Static(1),
-  MbglMapMode_Tile(2);
-
-  final int value;
-  const MbglMapMode(this.value);
-
-  static MbglMapMode fromValue(int value) => switch (value) {
-    0 => MbglMapMode_Continuous,
-    1 => MbglMapMode_Static,
-    2 => MbglMapMode_Tile,
-    _ => throw ArgumentError('Unknown value for MbglMapMode: $value'),
-  };
-}
 
 enum MbglStyleLayerType {
   MbglStyleLayerType_Fill(0),
@@ -5315,6 +5298,137 @@ typedef mbgl_style_heatmap_layer_t = ffi.Pointer<ffi.Void>;
 typedef mbgl_style_fill_extrusion_layer_t = ffi.Pointer<ffi.Void>;
 typedef mbgl_style_raster_layer_t = ffi.Pointer<ffi.Void>;
 typedef mbgl_style_hillshade_layer_t = ffi.Pointer<ffi.Void>;
+
+enum MBGL_MAP_MODE {
+  MBGL_MAP_MODE_CONTINUOUS(0),
+  MBGL_MAP_MODE_STATIC(1),
+  MBGL_MAP_MODE_TILE(2);
+
+  final int value;
+  const MBGL_MAP_MODE(this.value);
+
+  static MBGL_MAP_MODE fromValue(int value) => switch (value) {
+    0 => MBGL_MAP_MODE_CONTINUOUS,
+    1 => MBGL_MAP_MODE_STATIC,
+    2 => MBGL_MAP_MODE_TILE,
+    _ => throw ArgumentError('Unknown value for MBGL_MAP_MODE: $value'),
+  };
+}
+
+enum MBGL_CONSTRAIN_MODE {
+  MBGL_CONSTRAIN_MODE_NONE(0),
+  MBGL_CONSTRAIN_MODE_HEIGHT_ONLY(1),
+  MBGL_CONSTRAIN_MODE_WIDTH_AND_HEIGHT(2),
+  MBGL_CONSTRAIN_MODE_SCREEN(3);
+
+  final int value;
+  const MBGL_CONSTRAIN_MODE(this.value);
+
+  static MBGL_CONSTRAIN_MODE fromValue(int value) => switch (value) {
+    0 => MBGL_CONSTRAIN_MODE_NONE,
+    1 => MBGL_CONSTRAIN_MODE_HEIGHT_ONLY,
+    2 => MBGL_CONSTRAIN_MODE_WIDTH_AND_HEIGHT,
+    3 => MBGL_CONSTRAIN_MODE_SCREEN,
+    _ => throw ArgumentError('Unknown value for MBGL_CONSTRAIN_MODE: $value'),
+  };
+}
+
+enum MBGL_VIEWPORT_MODE {
+  MBGL_VIEWPORT_MODE_DEFAULT(0),
+  MBGL_VIEWPORT_MODE_FLIPPED_Y(1);
+
+  final int value;
+  const MBGL_VIEWPORT_MODE(this.value);
+
+  static MBGL_VIEWPORT_MODE fromValue(int value) => switch (value) {
+    0 => MBGL_VIEWPORT_MODE_DEFAULT,
+    1 => MBGL_VIEWPORT_MODE_FLIPPED_Y,
+    _ => throw ArgumentError('Unknown value for MBGL_VIEWPORT_MODE: $value'),
+  };
+}
+
+enum MBGL_MAP_DEBUG_OPTIONS {
+  MBGL_MAP_DEBUG_OPTIONS_NO_DEBUG(0),
+  MBGL_MAP_DEBUG_OPTIONS_TILE_BORDERS(2),
+  MBGL_MAP_DEBUG_OPTIONS_PARSE_STATUS(4),
+  MBGL_MAP_DEBUG_OPTIONS_TIMESTAMPS(8),
+  MBGL_MAP_DEBUG_OPTIONS_COLLISION(16),
+  MBGL_MAP_DEBUG_OPTIONS_OVERDRAW(32),
+  MBGL_MAP_DEBUG_OPTIONS_STENCIL_CLIP(64),
+  MBGL_MAP_DEBUG_OPTIONS_DEPTH_BUFFER(128);
+
+  final int value;
+  const MBGL_MAP_DEBUG_OPTIONS(this.value);
+
+  static MBGL_MAP_DEBUG_OPTIONS fromValue(int value) => switch (value) {
+    0 => MBGL_MAP_DEBUG_OPTIONS_NO_DEBUG,
+    2 => MBGL_MAP_DEBUG_OPTIONS_TILE_BORDERS,
+    4 => MBGL_MAP_DEBUG_OPTIONS_PARSE_STATUS,
+    8 => MBGL_MAP_DEBUG_OPTIONS_TIMESTAMPS,
+    16 => MBGL_MAP_DEBUG_OPTIONS_COLLISION,
+    32 => MBGL_MAP_DEBUG_OPTIONS_OVERDRAW,
+    64 => MBGL_MAP_DEBUG_OPTIONS_STENCIL_CLIP,
+    128 => MBGL_MAP_DEBUG_OPTIONS_DEPTH_BUFFER,
+    _ => throw ArgumentError('Unknown value for MBGL_MAP_DEBUG_OPTIONS: $value'),
+  };
+}
+
+enum MBGL_NORTH_ORIENTATION {
+  MBGL_NORTH_ORIENTATION_UPWARDS(0),
+  MBGL_NORTH_ORIENTATION_RIGHTWARDS(1),
+  MBGL_NORTH_ORIENTATION_DOWNWARDS(2),
+  MBGL_NORTH_ORIENTATION_LEFTWARDS(3);
+
+  final int value;
+  const MBGL_NORTH_ORIENTATION(this.value);
+
+  static MBGL_NORTH_ORIENTATION fromValue(int value) => switch (value) {
+    0 => MBGL_NORTH_ORIENTATION_UPWARDS,
+    1 => MBGL_NORTH_ORIENTATION_RIGHTWARDS,
+    2 => MBGL_NORTH_ORIENTATION_DOWNWARDS,
+    3 => MBGL_NORTH_ORIENTATION_LEFTWARDS,
+    _ => throw ArgumentError('Unknown value for MBGL_NORTH_ORIENTATION: $value'),
+  };
+}
+
+final class MBGL_UTIL_UNIT_BEZIER extends ffi.Struct {
+  @ffi.Double()
+  external double p1x;
+
+  @ffi.Double()
+  external double p1y;
+
+  @ffi.Double()
+  external double p2x;
+
+  @ffi.Double()
+  external double p2y;
+}
+
+final class MBGL_ANIMATION_OPTIONS extends ffi.Struct {
+  @ffi.Bool()
+  external bool has_duration;
+
+  @ffi.Int64()
+  external int duration;
+
+  @ffi.Bool()
+  external bool has_velocity;
+
+  @ffi.Double()
+  external double velocity;
+
+  @ffi.Bool()
+  external bool has_min_zoom;
+
+  @ffi.Double()
+  external double min_zoom;
+
+  @ffi.Bool()
+  external bool has_easing;
+
+  external MBGL_UTIL_UNIT_BEZIER easing;
+}
 
 const int __has_safe_buffers = 1;
 

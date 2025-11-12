@@ -53,7 +53,7 @@ class RendererFrontend : public mbgl::RendererFrontend {
   }
 
   void update(std::shared_ptr<mbgl::UpdateParameters> updateParameters_) override {
-    updateParameters = updateParameters_;
+    updateParameters = std::move(updateParameters_);
     if (invalidateCallback) {
       if (renderScheduled) return;
       renderScheduled = true;
@@ -71,6 +71,21 @@ class RendererFrontend : public mbgl::RendererFrontend {
   int64_t getTextureId() const { return textureInterface->getTextureId(); }
 
   void setInvalidateCallback(std::function<void()> callback) { invalidateCallback = std::move(callback); }
+
+  void reduceMemoryUse() {
+    assert(renderer);
+    renderer->reduceMemoryUse();
+  }
+
+  void setTileCacheEnabled(bool enabled) {
+    assert(renderer);
+    renderer->setTileCacheEnabled(enabled);
+  }
+
+  bool getTileCacheEnabled() const {
+    assert(renderer);
+    return renderer->getTileCacheEnabled();
+  }
 
  private:
   mbgl::Size size;

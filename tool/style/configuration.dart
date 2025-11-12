@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import '_.dart';
 
 import 'package:path/path.dart' as p;
 
@@ -13,9 +14,7 @@ final mbglCoreEnumUnsupportedValues = <String, List<String>>{
   'icon-rotation-alignment': ['viewport-glyph'],
 };
 
-final scriptDir = p.dirname(Platform.script.toFilePath());
-final projectRoot = p.normalize(p.join(scriptDir, '..'));
-final refSpecJsonFile = File(p.join(projectRoot, 'tool', 'reference', 'v8.json'));
+final refSpecJsonFile = File(p.join(projectRoot, 'tool', 'style', 'reference', 'v8.json'));
 final spec = jsonDecode(refSpecJsonFile.readAsStringSync());
 
 final outputDartFile = File(p.join(projectRoot, 'lib', 'gen', 'style.gen.dart'));

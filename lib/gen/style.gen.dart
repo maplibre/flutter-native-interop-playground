@@ -23,7 +23,7 @@ class FillLayer extends Layer {
     super.minZoom,
     super.maxZoom,
     super.sourceLayer,
-  }): super._(mbgl_style_fill_layer_create(withZoneArena(() => id.toNativeUtf8(allocator: zoneArena).cast()), withZoneArena(() => sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
+  }): super._(withZoneArena(() => mbgl_style_fill_layer_create(id.toNativeUtf8(allocator: zoneArena).cast(), sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
     if (fillSortKey != null) this.fillSortKey = fillSortKey;
     if (visibility != null) this.visibility = visibility;
     if (fillAntialias != null) this.fillAntialias = fillAntialias;
@@ -124,7 +124,7 @@ class LineLayer extends Layer {
     super.minZoom,
     super.maxZoom,
     super.sourceLayer,
-  }): super._(mbgl_style_line_layer_create(withZoneArena(() => id.toNativeUtf8(allocator: zoneArena).cast()), withZoneArena(() => sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
+  }): super._(withZoneArena(() => mbgl_style_line_layer_create(id.toNativeUtf8(allocator: zoneArena).cast(), sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
     if (lineCap != null) this.lineCap = lineCap;
     if (lineJoin != null) this.lineJoin = lineJoin;
     if (lineMiterLimit != null) this.lineMiterLimit = lineMiterLimit;
@@ -313,7 +313,7 @@ class SymbolLayer extends Layer {
     super.minZoom,
     super.maxZoom,
     super.sourceLayer,
-  }): super._(mbgl_style_symbol_layer_create(withZoneArena(() => id.toNativeUtf8(allocator: zoneArena).cast()), withZoneArena(() => sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
+  }): super._(withZoneArena(() => mbgl_style_symbol_layer_create(id.toNativeUtf8(allocator: zoneArena).cast(), sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
     if (symbolPlacement != null) this.symbolPlacement = symbolPlacement;
     if (symbolSpacing != null) this.symbolSpacing = symbolSpacing;
     if (symbolAvoidEdges != null) this.symbolAvoidEdges = symbolAvoidEdges;
@@ -714,7 +714,7 @@ class CircleLayer extends Layer {
     super.minZoom,
     super.maxZoom,
     super.sourceLayer,
-  }): super._(mbgl_style_circle_layer_create(withZoneArena(() => id.toNativeUtf8(allocator: zoneArena).cast()), withZoneArena(() => sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
+  }): super._(withZoneArena(() => mbgl_style_circle_layer_create(id.toNativeUtf8(allocator: zoneArena).cast(), sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
     if (circleSortKey != null) this.circleSortKey = circleSortKey;
     if (visibility != null) this.visibility = visibility;
     if (circleRadius != null) this.circleRadius = circleRadius;
@@ -828,7 +828,7 @@ class HeatmapLayer extends Layer {
     super.minZoom,
     super.maxZoom,
     super.sourceLayer,
-  }): super._(mbgl_style_heatmap_layer_create(withZoneArena(() => id.toNativeUtf8(allocator: zoneArena).cast()), withZoneArena(() => sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
+  }): super._(withZoneArena(() => mbgl_style_heatmap_layer_create(id.toNativeUtf8(allocator: zoneArena).cast(), sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
     if (visibility != null) this.visibility = visibility;
     if (heatmapRadius != null) this.heatmapRadius = heatmapRadius;
     if (heatmapWeight != null) this.heatmapWeight = heatmapWeight;
@@ -903,7 +903,7 @@ class FillExtrusionLayer extends Layer {
     super.minZoom,
     super.maxZoom,
     super.sourceLayer,
-  }): super._(mbgl_style_fill_extrusion_layer_create(withZoneArena(() => id.toNativeUtf8(allocator: zoneArena).cast()), withZoneArena(() => sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
+  }): super._(withZoneArena(() => mbgl_style_fill_extrusion_layer_create(id.toNativeUtf8(allocator: zoneArena).cast(), sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
     if (visibility != null) this.visibility = visibility;
     if (fillExtrusionOpacity != null) this.fillExtrusionOpacity = fillExtrusionOpacity;
     if (fillExtrusionColor != null) this.fillExtrusionColor = fillExtrusionColor;
@@ -996,7 +996,7 @@ class RasterLayer extends Layer {
     super.minZoom,
     super.maxZoom,
     super.sourceLayer,
-  }): super._(mbgl_style_raster_layer_create(withZoneArena(() => id.toNativeUtf8(allocator: zoneArena).cast()), withZoneArena(() => sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
+  }): super._(withZoneArena(() => mbgl_style_raster_layer_create(id.toNativeUtf8(allocator: zoneArena).cast(), sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
     if (visibility != null) this.visibility = visibility;
     if (rasterOpacity != null) this.rasterOpacity = rasterOpacity;
     if (rasterHueRotate != null) this.rasterHueRotate = rasterHueRotate;
@@ -1087,7 +1087,7 @@ class HillshadeLayer extends Layer {
     super.minZoom,
     super.maxZoom,
     super.sourceLayer,
-  }): super._(mbgl_style_hillshade_layer_create(withZoneArena(() => id.toNativeUtf8(allocator: zoneArena).cast()), withZoneArena(() => sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
+  }): super._(withZoneArena(() => mbgl_style_hillshade_layer_create(id.toNativeUtf8(allocator: zoneArena).cast(), sourceId.toNativeUtf8(allocator: zoneArena).cast()))) {
     if (visibility != null) this.visibility = visibility;
     if (hillshadeIlluminationDirection != null) this.hillshadeIlluminationDirection = hillshadeIlluminationDirection;
     if (hillshadeIlluminationAnchor != null) this.hillshadeIlluminationAnchor = hillshadeIlluminationAnchor;
@@ -1161,7 +1161,7 @@ class BackgroundLayer extends Layer {
     PropertyValue<double>? backgroundOpacity,
     super.minZoom,
     super.maxZoom,
-  }): super._(mbgl_style_background_layer_create(withZoneArena(() => id.toNativeUtf8(allocator: zoneArena).cast()))) {
+  }): super._(withZoneArena(() => mbgl_style_background_layer_create(id.toNativeUtf8(allocator: zoneArena).cast()))) {
     if (visibility != null) this.visibility = visibility;
     if (backgroundColor != null) this.backgroundColor = backgroundColor;
     if (backgroundPattern != null) this.backgroundPattern = backgroundPattern;

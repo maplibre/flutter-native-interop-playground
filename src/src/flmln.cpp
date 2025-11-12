@@ -33,9 +33,33 @@ void mbgl_map_options_destroy(mbgl_map_options_t _mapOptions) {
   delete reinterpret_cast<mbgl::MapOptions*>(_mapOptions);
 }
 
+MBGL_CONSTRAIN_MODE mbgl_map_options_constrain_mode_get(mbgl_map_options_t _mapOptions) {
+  auto* mapOptions = reinterpret_cast<mbgl::MapOptions*>(_mapOptions);
+  auto constrainMode = mapOptions->constrainMode();
+
+  switch (constrainMode) {
+    case mbgl::ConstrainMode::None:
+      return MBGL_CONSTRAIN_MODE_NONE;
+    case mbgl::ConstrainMode::HeightOnly:
+      return MBGL_CONSTRAIN_MODE_HEIGHT;
+    case mbgl::ConstrainMode::WidthAndHeight:
+      return MBGL_CONSTRAIN_MODE_WIDTH_AND_HEIGHT;
+    case mbgl::ConstrainMode::Screen:
+      return MBGL_CONSTRAIN_MODE_SCREEEN;
+  }
+
+  // TODO: Fallback values.
+  return MBGL_CONSTRAIN_MODE_NONE;
+}
+
+void mbgl_map_options_constrain_mode_set(mbgl_map_options_t _mapOptions) {
+  
+}
+
 void mbgl_map_options_set_mode(mbgl_map_options_t _mapOptions, enum MbglMapMode mode) {
   auto* mapOptions = reinterpret_cast<mbgl::MapOptions*>(_mapOptions);
   mapOptions->withMapMode(static_cast<mbgl::MapMode>(mode));
+  mapOptions->withConstrainMode(mbgl::ConstrainMode::)
 }
 
 void mbgl_map_options_set_size(mbgl_map_options_t _mapOptions, uint32_t width, uint32_t height) {
@@ -53,6 +77,7 @@ void mbgl_map_options_set_pixel_ratio(mbgl_map_options_t _mapOptions, float pixe
 // ----------------------------------
 
 mbgl_tile_server_options_t mbgl_tile_server_options_create() {
+  auto a = new mbgl::TileServerOptions();
   return reinterpret_cast<mbgl_tile_server_options_t>(new mbgl::TileServerOptions());
 }
 
@@ -125,7 +150,6 @@ void flmln_renderer_frontend_destroy(flmln_renderer_frontend_t _rendererFrontend
 
 void flmln_renderer_frontend_render(flmln_renderer_frontend_t _rendererFrontend) {
   auto* rendererFrontend = reinterpret_cast<flmln::RendererFrontend*>(_rendererFrontend);
-  mbgl::util::RunLoop::Get()->runOnce();
   rendererFrontend->renderFrame();
 }
 
@@ -143,6 +167,21 @@ int64_t flmln_renderer_frontend_get_texture_id(flmln_renderer_frontend_t _render
 void flmln_renderer_frontend_set_invalidate_callback(flmln_renderer_frontend_t _rendererFrontend, void (*callback)()) {
   auto* rendererFrontend = reinterpret_cast<flmln::RendererFrontend*>(_rendererFrontend);
   rendererFrontend->setInvalidateCallback([callback]() { callback(); });
+}
+
+void flmln_renderer_frontend_reduce_memory_use(flmln_renderer_frontend_t _rendererFrontend) {
+  auto* rendererFrontend = reinterpret_cast<flmln::RendererFrontend*>(_rendererFrontend);
+  rendererFrontend->reduceMemoryUse();
+}
+
+void flmln_renderer_frontend_set_tile_cache_enabled(flmln_renderer_frontend_t _rendererFrontend, bool enabled) {
+  auto* rendererFrontend = reinterpret_cast<flmln::RendererFrontend*>(_rendererFrontend);
+  rendererFrontend->setTileCacheEnabled(enabled);
+}
+
+bool flmln_renderer_frontend_get_tile_cache_enabled(flmln_renderer_frontend_t _rendererFrontend) {
+  auto* rendererFrontend = reinterpret_cast<flmln::RendererFrontend*>(_rendererFrontend);
+  return rendererFrontend->getTileCacheEnabled();
 }
 
 // ---------------------------------
