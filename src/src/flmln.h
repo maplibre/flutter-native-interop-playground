@@ -34,6 +34,22 @@ typedef void* mbgl_color_t;
 typedef void* mbgl_padding_t;
 typedef void* mbgl_variable_anchor_offset_collection_t;
 
+// ---------------------------------
+// mbgl_map_options_t
+// ---------------------------------
+
+EXTERNC FLMLN_EXPORT mbgl_map_options_t mbgl_map_options_create();
+EXTERNC FLMLN_EXPORT void mbgl_map_options_destroy(mbgl_map_options_t _mapOptions);
+
+enum MbglMapMode {
+  MbglMapMode_Continuous = 0,
+  MbglMapMode_Static = 1,
+  MbglMapMode_Tile = 2,
+};
+EXTERNC FLMLN_EXPORT void mbgl_map_options_set_mode(mbgl_map_options_t _mapOptions, enum MbglMapMode mode);
+EXTERNC FLMLN_EXPORT void mbgl_map_options_set_size(mbgl_map_options_t _mapOptions, uint32_t width, uint32_t height);
+EXTERNC FLMLN_EXPORT void mbgl_map_options_set_pixel_ratio(mbgl_map_options_t _mapOptions, float pixelRatio);
+
 // ----------------------------------
 // mbgl_tile_server_options_t
 // ----------------------------------

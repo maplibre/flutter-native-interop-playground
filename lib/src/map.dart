@@ -5,7 +5,7 @@ class FlMlnMap extends ChangeNotifier {
   FlMlnMap() {
     _rendererFrontendPtr = flmln_renderer_frontend_create();
     _mapObserverPtr = flmln_map_observer_create();
-    _mapPtr = mbgl_map_create();
+    // _mapPtr = mbgl_map_create();
   }
 
   late final flmln_renderer_frontend_t _rendererFrontendPtr;

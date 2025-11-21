@@ -33,33 +33,9 @@ void mbgl_map_options_destroy(mbgl_map_options_t _mapOptions) {
   delete reinterpret_cast<mbgl::MapOptions*>(_mapOptions);
 }
 
-MBGL_CONSTRAIN_MODE mbgl_map_options_constrain_mode_get(mbgl_map_options_t _mapOptions) {
-  auto* mapOptions = reinterpret_cast<mbgl::MapOptions*>(_mapOptions);
-  auto constrainMode = mapOptions->constrainMode();
-
-  switch (constrainMode) {
-    case mbgl::ConstrainMode::None:
-      return MBGL_CONSTRAIN_MODE_NONE;
-    case mbgl::ConstrainMode::HeightOnly:
-      return MBGL_CONSTRAIN_MODE_HEIGHT;
-    case mbgl::ConstrainMode::WidthAndHeight:
-      return MBGL_CONSTRAIN_MODE_WIDTH_AND_HEIGHT;
-    case mbgl::ConstrainMode::Screen:
-      return MBGL_CONSTRAIN_MODE_SCREEEN;
-  }
-
-  // TODO: Fallback values.
-  return MBGL_CONSTRAIN_MODE_NONE;
-}
-
-void mbgl_map_options_constrain_mode_set(mbgl_map_options_t _mapOptions) {
-  
-}
-
 void mbgl_map_options_set_mode(mbgl_map_options_t _mapOptions, enum MbglMapMode mode) {
   auto* mapOptions = reinterpret_cast<mbgl::MapOptions*>(_mapOptions);
   mapOptions->withMapMode(static_cast<mbgl::MapMode>(mode));
-  mapOptions->withConstrainMode(mbgl::ConstrainMode::)
 }
 
 void mbgl_map_options_set_size(mbgl_map_options_t _mapOptions, uint32_t width, uint32_t height) {

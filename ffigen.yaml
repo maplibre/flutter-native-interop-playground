@@ -11,7 +11,6 @@ headers:
   entry-points:
     - src/src/flmln.h
     - src/src/flmln_style_gen.h
-    - src/src/flmln_ffi_gen.h
 
 functions:
   include:
