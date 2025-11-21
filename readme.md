@@ -43,7 +43,7 @@ generate style code:
 run ffigen:
 
 ```bash
-./ffigen.py
+./tool/ffigen.py
 ```
 
 testing only: create a `lib/keys.dart` file and add your style url/api key:
