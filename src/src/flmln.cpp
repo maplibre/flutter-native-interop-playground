@@ -1,4 +1,5 @@
 #include "flmln.h"
+#include "flmln_ffi_gen.h"
 
 #include <stdint.h>
 
@@ -41,11 +42,11 @@ MBGL_CONSTRAIN_MODE mbgl_map_options_constrain_mode_get(mbgl_map_options_t _mapO
     case mbgl::ConstrainMode::None:
       return MBGL_CONSTRAIN_MODE_NONE;
     case mbgl::ConstrainMode::HeightOnly:
-      return MBGL_CONSTRAIN_MODE_HEIGHT;
+      return MBGL_CONSTRAIN_MODE_HEIGHT_ONLY;
     case mbgl::ConstrainMode::WidthAndHeight:
       return MBGL_CONSTRAIN_MODE_WIDTH_AND_HEIGHT;
     case mbgl::ConstrainMode::Screen:
-      return MBGL_CONSTRAIN_MODE_SCREEEN;
+      return MBGL_CONSTRAIN_MODE_SCREEN;
   }
 
   // TODO: Fallback values.
@@ -56,10 +57,9 @@ void mbgl_map_options_constrain_mode_set(mbgl_map_options_t _mapOptions) {
   
 }
 
-void mbgl_map_options_set_mode(mbgl_map_options_t _mapOptions, enum MbglMapMode mode) {
+void mbgl_map_options_set_mode(mbgl_map_options_t _mapOptions, MBGL_MAP_MODE mode) {
   auto* mapOptions = reinterpret_cast<mbgl::MapOptions*>(_mapOptions);
   mapOptions->withMapMode(static_cast<mbgl::MapMode>(mode));
-  mapOptions->withConstrainMode(mbgl::ConstrainMode::)
 }
 
 void mbgl_map_options_set_size(mbgl_map_options_t _mapOptions, uint32_t width, uint32_t height) {

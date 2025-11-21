@@ -3,6 +3,9 @@
 #include "stdint.h"
 #include "stdbool.h"
 
+// Duration type for animation durations (in milliseconds)
+typedef int64_t MBGL_DURATION;
+
 // C-compatible enum definition for mbgl::MapMode
 typedef enum MBGL_MAP_MODE {
   MBGL_MAP_MODE_CONTINUOUS = 0,
