@@ -14,6 +14,7 @@ git clone --recurse-submodules https://github.com/maplibre/maplibre-native --dep
 ```
 
 clean build artifacts:
+install `cmake`
 
 ```bash
 ./tool/clean_build.py
@@ -24,9 +25,9 @@ build the dynamic libraries (by default, builds in `RelWithDebInfo`):
 ```bash
 ./tool/build-libraries.py # build everything
 
-./tool/build-libraries.py ios
-./tool/build-libraries.py macos
-./tool/build-libraries.py android
+./tool/build_libraries.py ios
+./tool/build_libraries.py macos
+./tool/build_libraries.py android
 
 ./tool/build-libraries.py --verbose # see build output
 ```
