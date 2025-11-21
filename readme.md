@@ -14,7 +14,9 @@ git clone --recurse-submodules https://github.com/maplibre/maplibre-native --dep
 ```
 
 clean build artifacts:
-install `cmake`
+
+* install `cmake`
+* Create a new python env with e.g. `venv`.
 
 ```bash
 ./tool/clean_build.py
