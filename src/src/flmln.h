@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "flmln_ffi_gen.h"
 
 #define FLMLN_EXPORT __attribute__((__visibility__("default"))) __attribute__((__used__))
 
@@ -33,6 +34,18 @@ typedef void* mbgl_style_property_value_t;
 typedef void* mbgl_color_t;
 typedef void* mbgl_padding_t;
 typedef void* mbgl_variable_anchor_offset_collection_t;
+
+// ---------------------------------
+// mbgl_map_options_t
+// ---------------------------------
+
+EXTERNC FLMLN_EXPORT mbgl_map_options_t mbgl_map_options_create();
+EXTERNC FLMLN_EXPORT void mbgl_map_options_destroy(mbgl_map_options_t _mapOptions);
+EXTERNC FLMLN_EXPORT MBGL_CONSTRAIN_MODE mbgl_map_options_constrain_mode_get(mbgl_map_options_t _mapOptions);
+EXTERNC FLMLN_EXPORT void mbgl_map_options_constrain_mode_set(mbgl_map_options_t _mapOptions);
+EXTERNC FLMLN_EXPORT void mbgl_map_options_set_mode(mbgl_map_options_t _mapOptions, MBGL_MAP_MODE mode);
+EXTERNC FLMLN_EXPORT void mbgl_map_options_set_size(mbgl_map_options_t _mapOptions, uint32_t width, uint32_t height);
+EXTERNC FLMLN_EXPORT void mbgl_map_options_set_pixel_ratio(mbgl_map_options_t _mapOptions, float pixelRatio);
 
 // ----------------------------------
 // mbgl_tile_server_options_t
