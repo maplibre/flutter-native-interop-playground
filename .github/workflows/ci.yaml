@@ -33,7 +33,9 @@ jobs:
           git checkout 29428dce42000484d387ffc7825326faf35c093d
           git submodule update --init --recursive --depth 1
       - name: "Build MapLibre Native Core"
-        run: ./tool/build_libraries.py android
+        run: |
+          pip install tqdm
+          ./tool/build_libraries.py android
       - name: "Get Flutter dependencies"
         run: dart pub get
       - name: Build example APK
@@ -59,7 +61,9 @@ jobs:
           git checkout 29428dce42000484d387ffc7825326faf35c093d
           git submodule update --init --recursive --depth 1
       - name: "Build MapLibre Native Core"
-        run: ./tool/build_libraries.py ios
+        run: |
+          pip install tqdm
+          ./tool/build_libraries.py android
       - name: "Get Flutter dependencies"
         run: dart pub get
       - name: "Build iOS package"
