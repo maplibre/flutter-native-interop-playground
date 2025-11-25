@@ -11,3 +11,4 @@ lib/keys.dart
 **/*.dylib
 
 __pycache__
+/.idea
