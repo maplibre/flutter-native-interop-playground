@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/widgets.dart' as ui;
 
-import 'package:flmln/gen/flmln_bindings.dart';
+import 'package:flmln/src/gen/flmln_bindings.dart';
 
 extension ColorToMbgl on ui.Color {
   mbgl_color_t toMbglColor() {

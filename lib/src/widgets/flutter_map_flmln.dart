@@ -1,4 +1,4 @@
-import 'package:flmln/gen/flmln_bindings.dart';
+import 'package:flmln/src/gen/flmln_bindings.dart';
 import 'package:flmln/src/widgets/flmln_renderer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';

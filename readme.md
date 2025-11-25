@@ -49,7 +49,7 @@ run ffigen:
 ./tool/ffigen.py
 ```
 
-testing only: create a `lib/keys.dart` file and add your style url/api key:
+testing only: create a `example/lib/keys.dart` file and add your style url/api key:
 
 ```dart
 const styleUrl = 'https://api.maptiler.com/maps/streets-v4-dark/style.json?key=x';
@@ -70,8 +70,6 @@ flutter run
 `src` - C/C++ code (copied over to third-party/maplibre-native/platform/flutter) during builds
 
 `tool` - build scripts
-
-`ffigen.yaml` - ffigen config
 
 `ios/flmln/Sources` and `macos/flmln/Sources` - Swift code for texture interfacing with Flutter (NOTE: those two folders are almost exactly the same! i couldn't find a way to share them in a Darwin folder.)
 

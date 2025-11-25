@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
 
-import 'package:flmln/gen/flmln_bindings.dart';
+import 'package:flmln/src/gen/flmln_bindings.dart';
 import 'package:flmln/src/style/style.dart';
 import 'package:flmln/src/utils/ffi_utils.dart';
 
