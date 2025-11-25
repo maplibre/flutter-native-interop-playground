@@ -6,14 +6,17 @@ install bazelisk (required for ios builds):
 bazelisk
 ```
 
-clone maplibre-native with submodules: (TODO: maybe there's a better way to do this?)
+clone maplibre-native with submodules at a specific commit: (TODO: maybe there's a better way to do this?)
 
 ```bash
-git clone --recurse-submodules --shallow-submodules --depth 1 -j8 https://github.com/maplibre/maplibre-native third-party/maplibre-native
+git clone https://github.com/maplibre/maplibre-native \
+    --filter=blob:none \
+    --no-checkout \
+    third-party/maplibre-native
 cd third-party/maplibre-native
-git fetch origin 29428dce42000484d387ffc7825326faf35c093d
 git checkout 29428dce42000484d387ffc7825326faf35c093d
 git submodule update --init --recursive --depth 1
+
 ```
 
 clean build artifacts:

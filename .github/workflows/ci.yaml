@@ -25,12 +25,15 @@ jobs:
           cache: 'gradle'
       - name: "Download MapLibre Native Core"
         run: |
-          git clone --recurse-submodules --shallow-submodules --depth 1 -j8 https://github.com/maplibre/maplibre-native third-party/maplibre-native
+          git clone https://github.com/maplibre/maplibre-native \
+            --filter=blob:none \
+            --no-checkout \
+            third-party/maplibre-native
           cd third-party/maplibre-native
-          git fetch origin 29428dce42000484d387ffc7825326faf35c093d
           git checkout 29428dce42000484d387ffc7825326faf35c093d
           git submodule update --init --recursive --depth 1
-          ./tool/build_libraries.py android
+      - name: "Build MapLibre Native Core"
+        run: ./tool/build_libraries.py android
       - name: "Get Flutter dependencies"
         run: dart pub get
       - name: Build example APK
@@ -48,12 +51,15 @@ jobs:
       - run: flutter config --enable-swift-package-manager
       - name: "Download MapLibre Native Core"
         run: |
-          git clone --recurse-submodules --shallow-submodules --depth 1 -j8 https://github.com/maplibre/maplibre-native third-party/maplibre-native
+          git clone https://github.com/maplibre/maplibre-native \
+            --filter=blob:none \
+            --no-checkout \
+            third-party/maplibre-native
           cd third-party/maplibre-native
-          git fetch origin 29428dce42000484d387ffc7825326faf35c093d
           git checkout 29428dce42000484d387ffc7825326faf35c093d
           git submodule update --init --recursive --depth 1
-          ./tool/build_libraries.py ios
+      - name: "Build MapLibre Native Core"
+        run: ./tool/build_libraries.py ios
       - name: "Get Flutter dependencies"
         run: dart pub get
       - name: "Build iOS package"
