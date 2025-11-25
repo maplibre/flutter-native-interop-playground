@@ -16,7 +16,7 @@ dependencies:
 
 dev_dependencies:
   flutter_lints: ^6.0.0
-  ffigen: ^19.1.0
+  ffigen: ^20.0.0
   path: ^1.9.1
   equatable: ^2.0.7
 

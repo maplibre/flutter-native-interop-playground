@@ -6,11 +6,17 @@ install bazelisk (required for ios builds):
 bazelisk
 ```
 
-clone maplibre-native with submodules: (TODO: maybe there's a better way to do this?)
+clone maplibre-native with submodules at a specific commit: (TODO: maybe there's a better way to do this?)
 
 ```bash
-cd third-party
-git clone --recurse-submodules https://github.com/maplibre/maplibre-native --depth 1
+git clone https://github.com/maplibre/maplibre-native \
+    --filter=blob:none \
+    --no-checkout \
+    third-party/maplibre-native
+cd third-party/maplibre-native
+git checkout 29428dce42000484d387ffc7825326faf35c093d
+git submodule update --init --recursive --depth 1
+
 ```
 
 clean build artifacts:
@@ -46,7 +52,7 @@ run ffigen:
 ./tool/ffigen.py
 ```
 
-testing only: create a `lib/keys.dart` file and add your style url/api key:
+testing only: create a `example/lib/keys.dart` file and add your style url/api key:
 
 ```dart
 const styleUrl = 'https://api.maptiler.com/maps/streets-v4-dark/style.json?key=x';
@@ -67,8 +73,6 @@ flutter run
 `src` - C/C++ code (copied over to third-party/maplibre-native/platform/flutter) during builds
 
 `tool` - build scripts
-
-`ffigen.yaml` - ffigen config
 
 `ios/flmln/Sources` and `macos/flmln/Sources` - Swift code for texture interfacing with Flutter (NOTE: those two folders are almost exactly the same! i couldn't find a way to share them in a Darwin folder.)
 

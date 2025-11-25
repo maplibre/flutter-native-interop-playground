@@ -1,3 +1,4 @@
+import 'package:example/keys.dart';
 import 'package:flmln/flmln.dart';
 import 'package:flutter/material.dart';
 
@@ -13,14 +14,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'aaaaaaaa',
-      theme: ThemeData.from(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          brightness: Brightness.dark,
-        ),
+      theme: ThemeData.from(colorScheme: ColorScheme.dark()),
+      home: Scaffold(
+        body: FlMlnWidget(styleUrl: styleUrl, apiKey: apiKey),
       ),
-      home: Scaffold(body: FlMlnWindget()),
       // home: Container(),
     );
   }

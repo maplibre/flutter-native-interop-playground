@@ -1,6 +1,6 @@
 # FVM Version Cache
 .fvm/
-lib/keys.dart
+example/lib/keys.dart
 **/.build
 **/.dart_tool
 **/*.xcframework
@@ -11,3 +11,4 @@ lib/keys.dart
 **/*.dylib
 
 __pycache__
+/.idea

@@ -179,7 +179,7 @@ class DartGenerator {
         c.add('typedef ${pv.dartTypeNameAlias} = $typeName;');
       }
     }
-    
+
     c.add('');
 
     List<String> _createPvSwitch(String Function(SpecField) resultGenerator, {bool isOnGeneric = false}) {

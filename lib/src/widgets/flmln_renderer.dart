@@ -1,8 +1,7 @@
 import 'dart:ffi' hide Size;
 
-import 'package:flmln/gen/flmln_bindings.dart';
+import 'package:flmln/src/gen/flmln_bindings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 class FlMlnRendererWidget extends StatefulWidget {
   const FlMlnRendererWidget({

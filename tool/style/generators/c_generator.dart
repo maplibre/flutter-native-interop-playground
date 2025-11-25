@@ -234,8 +234,7 @@ class CGenerator {
       src.add('  return reinterpret_cast<${layer.cName}>(layer);');
       src.add('}');
       src.add('');
-    }
-    else {
+    } else {
       hdr.add('$hdrFnPrefix ${layer.cName} ${layer.cCreateFnName}(char* layerId_);');
       src.add('$srcFnPrefix ${layer.cName} ${layer.cCreateFnName}(char* layerId_) {');
       src.add('  auto layer = new ${layer.mbglClassName}(std::string(layerId_));');

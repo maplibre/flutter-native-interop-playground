@@ -17,7 +17,7 @@ final mbglCoreEnumUnsupportedValues = <String, List<String>>{
 final refSpecJsonFile = File(p.join(projectRoot, 'tool', 'style', 'reference', 'v8.json'));
 final spec = jsonDecode(refSpecJsonFile.readAsStringSync());
 
-final outputDartFile = File(p.join(projectRoot, 'lib', 'gen', 'style.gen.dart'));
+final outputDartFile = File(p.join(projectRoot, 'lib', 'src', 'gen', 'style.gen.dart'));
 final outputCHeaderFile = File(p.join(projectRoot, 'src', 'src', 'flmln_style_gen.h'));
 final outputCSourceFile = File(p.join(projectRoot, 'src', 'src', 'flmln_style_gen.cpp'));
 

@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
-import 'package:flmln/gen/flmln_bindings.dart';
+import 'package:flmln/src/gen/flmln_bindings.dart';
 import 'package:flmln/src/style/layer.dart';
 import 'package:flmln/src/utils/ffi_utils.dart';
 

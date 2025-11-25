@@ -3,12 +3,12 @@ import 'dart:ffi';
 import 'package:flutter/widgets.dart' as ui;
 
 import 'package:ffi/ffi.dart';
-import 'package:flmln/gen/flmln_bindings.dart';
+import 'package:flmln/src/gen/flmln_bindings.dart';
 import 'package:flmln/src/utils/ffi_utils.dart';
 
 import 'style.dart';
 
-part 'package:flmln/gen/style.gen.dart';
+part 'package:flmln/src/gen/style.gen.dart';
 
 /// Rendering type of this layer.
 enum LayerType {
