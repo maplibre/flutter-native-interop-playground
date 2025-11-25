@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+  workflow_dispatch:
+
+# Ensure that new pushes/updates cancel running jobs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-android:
+    name: "[Android] Build APK"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: subosito/flutter-action@v2
+        with:
+          cache: true
+      - uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle'
+      - name: "Download MapLibre Native Core"
+        run: |
+          git clone --recurse-submodules --shallow-submodules --depth 1 -j8 https://github.com/maplibre/maplibre-native third-party/maplibre-native
+          cd third-party/maplibre-native
+          git fetch origin 29428dce42000484d387ffc7825326faf35c093d
+          git checkout 29428dce42000484d387ffc7825326faf35c093d
+          git submodule update --init --recursive --depth 1
+          ./tool/build_libraries.py android
+      - name: "Get Flutter dependencies"
+        run: dart pub get
+      - name: Build example APK
+        working-directory: example
+        run: flutter build apk
+  build-ios:
+    name: "[iOS] Build package"
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: subosito/flutter-action@v2
+        with:
+          cache: true
+      - run: flutter config --enable-swift-package-manager
+      - name: "Download MapLibre Native Core"
+        run: |
+          git clone --recurse-submodules --shallow-submodules --depth 1 -j8 https://github.com/maplibre/maplibre-native third-party/maplibre-native
+          cd third-party/maplibre-native
+          git fetch origin 29428dce42000484d387ffc7825326faf35c093d
+          git checkout 29428dce42000484d387ffc7825326faf35c093d
+          git submodule update --init --recursive --depth 1
+          ./tool/build_libraries.py ios
+      - name: "Get Flutter dependencies"
+        run: dart pub get
+      - name: "Build iOS package"
+        working-directory: example
+        run: flutter build ios --release --no-codesign
